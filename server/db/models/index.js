@@ -2,6 +2,7 @@ const User = require('./user')
 const Review = require('./review')
 const Product = require('./product')
 const Category = require('./category')
+const Order = require('./order')
 const ShippingAddress = require('./shippingAddress')
 
 /**
@@ -11,18 +12,15 @@ const ShippingAddress = require('./shippingAddress')
  *    BlogPost.belongsTo(User)
  */
 
-// Waiting to merge with Product table
 Product.hasMany(Review)
 Review.belongsTo(Product)
 User.hasMany(Order)
 User.hasMany(Review)
 Review.belongsTo(User)
 
-// ???
 Order.hasOne(Sessions)
 Sessions.belongsTo(Order)
 
-// Do i need both?
 User.hasOne(ShippingAddress)
 ShippingAddress.belongsTo(User)
 
@@ -34,7 +32,6 @@ ShippingAddress.belongsTo(User)
  */
 Product.hasMany('Review')
 Review.belongsTo('Product')
-Product.hasMany('Category')
 Category.belongsToMany('Product', {
   through: 'category_product'
 })
@@ -47,5 +44,6 @@ module.exports = {
   Review,
   Product,
   Category,
+  Order,
   ShippingAddress
 }
