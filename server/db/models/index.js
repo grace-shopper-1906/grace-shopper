@@ -20,12 +20,10 @@ Product.hasMany('Review')
 Review.belongsTo('Product')
 Product.hasMany('Category')
 Category.belongsToMany('Product', {
-  through: 'Category_Product',
-  foreignKey: 'theForeignKey'
+  through: 'Category_Product'
 })
 Product.belongsToMany('Category', {
-  through: 'Category_Product',
-  foreignKey: 'childForegnKey'
+  through: 'Category_Product'
 })
 
 module.exports = {
