@@ -23,13 +23,6 @@ const Product = db.define('product', {
       notEmpty: true
     }
   },
-  category: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
-  },
   description: {
     type: Sequelize.TEXT,
     allowNull: false,
@@ -39,6 +32,7 @@ const Product = db.define('product', {
   },
   picture: {
     type: Sequelize.STRING,
+    default: 'https://robohash.org/default/?set=set4',
     allowNull: false,
     validate: {
       notEmpty: true
