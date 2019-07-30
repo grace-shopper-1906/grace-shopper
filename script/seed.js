@@ -1,29 +1,47 @@
 'use strict'
 
-const db = require('../server/db')
+const db = require('../server/db/db')
 const {User, Review, Product, Category} = require('../server/db/models')
 
 const faker = require('faker')
+
+//add seed file for user ready to checkout etc
 
 const createProduct = async () => {
   for (let i = 0; i < 100; i++) {
     const product = {
       title: faker.commerce.productName(),
       picture: faker.image.technics(),
-      description: faker.commerce.product(),
+      description: faker.lorem.paragraph(),
       price: faker.commerce.price(),
-      inventory_quantity: Math.floor(Math.random() * 100 + 1)
+      inventoryQuantity: Math.floor(Math.random() * 100 + 1)
     }
     await Product.create(product)
   }
 }
 
 const createCategory = async () => {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     const category = {
       name: faker.commerce.department()
     }
     await Category.create(category)
+  }
+}
+
+const setCategoryOnProduct = async () => {
+  for (let j = 0; j < 3; j++) {
+    for (let i = 1; i < 101; i++) {
+      const category = await Category.findByPk(
+        Math.floor(Math.random() * 30 + 1)
+      )
+      const product = await Product.findByPk(i)
+      if (!product) {
+        console.log('Product not found')
+      } else {
+        await product.addCategory(category)
+      }
+    }
   }
 }
 
@@ -34,8 +52,8 @@ const createUser = async () => {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      shipping_address: `${faker.address.streetAddress()}, ${faker.address.city()}, ${faker.address.stateAbbr()} ${faker.address.zipCode()}`,
-      is_admin: faker.random.boolean()
+      shippingAddress: `${faker.address.streetAddress()}, ${faker.address.city()}, ${faker.address.stateAbbr()} ${faker.address.zipCode()}`,
+      isAdmin: faker.random.boolean()
     }
     await User.create(user)
   }
@@ -44,9 +62,9 @@ const createUser = async () => {
 const createReview = async () => {
   for (let i = 0; i < 100; i++) {
     const review = {
-      author_id: Math.floor(Math.random() * 30 + 1),
-      product_id: Math.floor(Math.random() * 100 + 1),
-      stars: Math.floor(Math.random() * 5) + 1,
+      userId: Math.floor(Math.random() * 30 + 1),
+      productId: Math.floor(Math.random() * 100 + 1),
+      star: Math.floor(Math.random() * 5) + 1,
       text: faker.lorem.paragraphs()
     }
     await Review.create(review)
@@ -61,6 +79,7 @@ async function seed() {
   await createCategory()
   await createUser()
   await createReview()
+  await setCategoryOnProduct()
 
   console.log(`seeded successfully`)
 }

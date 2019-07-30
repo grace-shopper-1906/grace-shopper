@@ -13,7 +13,7 @@ const Category = require('./category')
 // Waiting to merge with Product table
 Product.hasMany(Review)
 Review.belongsTo(Product)
-User.hasMany(Order)
+// User.hasMany(Order)
 User.hasMany(Review)
 Review.belongsTo(User)
 
@@ -23,13 +23,12 @@ Review.belongsTo(User)
  * for example, we can say: const {User} = require('../db/models')
  * instead of: const User = require('../db/models/user')
  */
-Product.hasMany('Review')
-Review.belongsTo('Product')
-Product.hasMany('Category')
-Category.belongsToMany('Product', {
+Product.hasMany(Review)
+Review.belongsTo(Product)
+Category.belongsToMany(Product, {
   through: 'Category_Product'
 })
-Product.belongsToMany('Category', {
+Product.belongsToMany(Category, {
   through: 'Category_Product'
 })
 
