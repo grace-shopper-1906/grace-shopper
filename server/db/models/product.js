@@ -32,7 +32,7 @@ const Product = db.define('product', {
   },
   isAvailable: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false
+    defaultValue: true
   },
   picture: {
     type: Sequelize.STRING,
