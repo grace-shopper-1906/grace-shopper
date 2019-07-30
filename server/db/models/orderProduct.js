@@ -3,11 +3,11 @@ const db = require('../db')
 
 const orderProduct = db.define('order_product', {
   productPrice: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   quantity: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false,
     defaultValue: 1
   }
