@@ -3,6 +3,7 @@ const Review = require('./review')
 const Product = require('./product')
 const Category = require('./category')
 const Order = require('./order')
+const ShippingAddress = require('./shippingAddress')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -11,12 +12,17 @@ const Order = require('./order')
  *    BlogPost.belongsTo(User)
  */
 
-// Waiting to merge with Product table
 Product.hasMany(Review)
 Review.belongsTo(Product)
 User.hasMany(Order)
 User.hasMany(Review)
 Review.belongsTo(User)
+
+Order.hasOne(Sessions)
+Sessions.belongsTo(Order)
+
+User.hasOne(ShippingAddress)
+ShippingAddress.belongsTo(User)
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -26,12 +32,11 @@ Review.belongsTo(User)
  */
 Product.hasMany('Review')
 Review.belongsTo('Product')
-Product.hasMany('Category')
 Category.belongsToMany('Product', {
-  through: 'Category_Product'
+  through: 'category_product'
 })
 Product.belongsToMany('Category', {
-  through: 'Category_Product'
+  through: 'category_product'
 })
 
 module.exports = {
@@ -39,5 +44,6 @@ module.exports = {
   Review,
   Product,
   Category,
-  Order
+  Order,
+  ShippingAddress
 }
