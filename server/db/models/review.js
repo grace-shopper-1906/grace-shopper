@@ -5,14 +5,17 @@ const Review = db.define('review', {
   star: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    // defaultValue?
     validate: {
       min: 1,
       max: 5
     }
   },
   text: {
-    type: Sequelize.TEXT
+    type: Sequelize.TEXT,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   }
 })
 
