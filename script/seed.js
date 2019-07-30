@@ -1,18 +1,67 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Review, Product, Category} = require('../server/db/models')
+
+const faker = require('faker')
+
+const createProduct = async () => {
+  for (let i = 0; i < 100; i++) {
+    const product = {
+      title: faker.commerce.productName(),
+      picture: faker.image.technics(),
+      description: faker.commerce.product(),
+      price: faker.commerce.price(),
+      inventory_quantity: Math.floor(Math.random() * 100 + 1)
+    }
+    await Product.create(product)
+  }
+}
+
+const createCategory = async () => {
+  for (let i = 0; i < 10; i++) {
+    const category = {
+      name: faker.commerce.department()
+    }
+    await Category.create(category)
+  }
+}
+
+const createUser = async () => {
+  for (let i = 0; i < 30; i++) {
+    const user = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      shipping_address: `${faker.address.streetAddress()}, ${faker.address.city()}, ${faker.address.stateAbbr()} ${faker.address.zipCode()}`,
+      is_admin: faker.random.boolean()
+    }
+    await User.create(user)
+  }
+}
+
+const createReview = async () => {
+  for (let i = 0; i < 100; i++) {
+    const review = {
+      author_id: Math.floor(Math.random() * 30 + 1),
+      product_id: Math.floor(Math.random() * 100 + 1),
+      stars: Math.floor(Math.random() * 5) + 1,
+      text: faker.lorem.paragraphs()
+    }
+    await Review.create(review)
+  }
+}
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ])
+  await createProduct()
+  await createCategory()
+  await createUser()
+  await createReview()
 
-  console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
 }
 
