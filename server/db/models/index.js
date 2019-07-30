@@ -1,7 +1,7 @@
 const User = require('./user')
 const db = require('./db')
-const Products = require('./product')
-const Categories = require('./category')
+const Product = require('./product')
+const Category = require('./category')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
