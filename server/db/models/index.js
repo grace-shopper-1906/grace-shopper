@@ -1,5 +1,5 @@
 const User = require('./user')
-const db = require('./db')
+const Review = require('./review')
 const Product = require('./product')
 const Category = require('./category')
 
@@ -9,6 +9,13 @@ const Category = require('./category')
  *
  *    BlogPost.belongsTo(User)
  */
+
+// Waiting to merge with Product table
+Product.hasMany(Review)
+Review.belongsTo(Product)
+User.hasMany(Order)
+User.hasMany(Review)
+Review.belongsTo(User)
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -27,8 +34,8 @@ Product.belongsToMany('Category', {
 })
 
 module.exports = {
-  db,
   User,
+  Review,
   Product,
   Category
 }
