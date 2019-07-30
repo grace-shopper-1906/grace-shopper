@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('./db')
 
-const Categories = db.define('categories', {
+const Category = db.define('category', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -11,4 +11,4 @@ const Categories = db.define('categories', {
   }
 })
 
-module.exports = Categories
+module.exports = Category
