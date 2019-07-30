@@ -1,11 +1,16 @@
 'use strict'
 
 const db = require('../server/db/db')
-const {User, Review, Product, Category} = require('../server/db/models')
+const {
+  User,
+  Review,
+  Product,
+  Category,
+  ShippingAddress,
+  Order
+} = require('../server/db/models')
 
 const faker = require('faker')
-
-//add seed file for user ready to checkout etc
 
 const createProduct = async () => {
   for (let i = 0; i < 100; i++) {
@@ -13,7 +18,7 @@ const createProduct = async () => {
       title: faker.commerce.productName(),
       picture: faker.image.technics(),
       description: faker.lorem.paragraph(),
-      price: faker.commerce.price(),
+      price: Math.floor(Math.random() * 100000 + 1),
       inventoryQuantity: Math.floor(Math.random() * 100 + 1)
     }
     await Product.create(product)
@@ -52,10 +57,23 @@ const createUser = async () => {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      shippingAddress: `${faker.address.streetAddress()}, ${faker.address.city()}, ${faker.address.stateAbbr()} ${faker.address.zipCode()}`,
       isAdmin: faker.random.boolean()
     }
     await User.create(user)
+  }
+}
+
+const createShippingAddress = async () => {
+  for (let i = 0; i < 30; i++) {
+    const shippingAddress = {
+      streetAddress: faker.address.streetAddress(),
+      city: faker.address.city(),
+      zipCode: faker.address.zipCode(),
+      state: faker.address.stateAbbr(),
+      country: faker.address.country(),
+      userId: Math.floor(Math.random() * 30 + 1)
+    }
+    await ShippingAddress.create(shippingAddress)
   }
 }
 
@@ -71,6 +89,24 @@ const createReview = async () => {
   }
 }
 
+const createOrder = async () => {
+  const statusOptions = [
+    'inCart',
+    'created',
+    'processed',
+    'cancelled',
+    'completed'
+  ]
+  for (let i = 0; i < 100; i++) {
+    const order = {
+      userId: Math.floor(Math.random() * 30 + 1),
+      sessionId: Math.floor(Math.random() * 30 + 1),
+      status: statusOptions[Math.floor(Math.random() * 5)]
+    }
+    await Order.create(order)
+  }
+}
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
@@ -80,6 +116,8 @@ async function seed() {
   await createUser()
   await createReview()
   await setCategoryOnProduct()
+  await createShippingAddress()
+  await createOrder()
 
   console.log(`seeded successfully`)
 }
