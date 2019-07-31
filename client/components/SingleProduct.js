@@ -3,31 +3,31 @@ import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import {getOneProduct} from '../store/oneProduct.js'
 
-export class JustOneProduct extends Component {
+export class JustOneProduct extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
+
+    this.backHomeButton = this.backHomeButton.bind(this)
   }
 
   componentDidMount() {
     this.props.fetchOneProduct(this.props.match.params.id)
     this.setState(this.props.match.params)
-    //this.setState(this.props.fetchOneProduct(this.props.match.params.id))
+  }
+
+  backHomeButton(event) {
+    event.preventDefault()
+    console.log(this.props.history.push('/'))
   }
 
   render() {
-    //console.log(this.props.oneProduct)
-    console.log(this.props.oneProduct)
     let p = this.props.oneProduct
-    if (p.categories) {
-      //console.log(p.categories[0].name)
-      p.categories.map(category => console.log(category.name))
-    }
-    if (p.reviews) {
-      p.reviews.map(review => console.log(review.star + ' ' + review.text))
-    }
     const main = (
       <div>
+        <button type="Submit" onClick={this.backHomeButton}>
+          Back to Home
+        </button>
         <h1>Will be formatted in a minute chill</h1>
         <h1>Title {p.title}</h1>
         <h1>Price {p.price}</h1>
@@ -67,7 +67,6 @@ export class JustOneProduct extends Component {
         )}
       </div>
     )
-    //return this.props.oneProduct ? 'Just a sec...' : main
     return this.state.oneProduct ? 'Just a sec...' : main
   }
 }
