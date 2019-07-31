@@ -7,9 +7,6 @@ const ProductCard = props => {
   const product = props.product
 
   const findReviewAvg = () => {
-    // if (!product.reviews.length) {
-    //   return 'No Reviews'
-    // }
     let total = 0
     product.reviews.map(review => {
       total += review.star
