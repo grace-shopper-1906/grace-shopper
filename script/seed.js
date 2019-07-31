@@ -17,7 +17,7 @@ const createProduct = async () => {
   for (let i = 0; i < 100; i++) {
     const product = {
       title: faker.commerce.productName(),
-      picture: faker.image.technics(),
+      picture: faker.image.image(),
       description: faker.lorem.paragraph(),
       price: Math.floor(Math.random() * 100000 + 1),
       inventoryQuantity: Math.floor(Math.random() * 100 + 1)
