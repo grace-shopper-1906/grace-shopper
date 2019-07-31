@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import {getOneProduct} from '../store/oneProduct.js'
+import {Button} from 'semantic-ui-react'
 
 export class JustOneProduct extends React.Component {
   constructor(props) {
@@ -25,9 +26,9 @@ export class JustOneProduct extends React.Component {
     let p = this.props.oneProduct
     const main = (
       <div>
-        <button type="Submit" onClick={this.backHomeButton}>
+        <Button type="Submit" onClick={this.backHomeButton}>
           Back to Home
-        </button>
+        </Button>
         <h1>Will be formatted in a minute chill</h1>
         <h1>Title {p.title}</h1>
         <h1>Price {p.price}</h1>
