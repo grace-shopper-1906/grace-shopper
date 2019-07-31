@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome} from './components'
+import {Login, Signup, UserHome, CartList} from './components'
 import {me} from './store'
+import {getCart} from './store/cart'
 import AllProducts from './components/AllProducts'
 
 /**
@@ -12,6 +13,7 @@ import AllProducts from './components/AllProducts'
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
+    this.props.getCart()
   }
 
   render() {
@@ -22,6 +24,7 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/cart/view" component={CartList} />
         <Route exact path="/products" component={AllProducts} />
         {isLoggedIn && (
           <Switch>
@@ -51,7 +54,8 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
-    }
+    },
+    getCart: () => dispatch(getCart())
   }
 }
 

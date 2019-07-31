@@ -14,7 +14,6 @@ User.hasMany(Review)
 Review.belongsTo(User)
 
 User.hasMany(Order)
-// Order.belongsTo(Sessions)
 
 User.hasOne(ShippingAddress)
 ShippingAddress.belongsTo(User)
