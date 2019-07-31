@@ -5,4 +5,7 @@
  */
 export {default as Navbar} from './navbar'
 export {default as UserHome} from './user-home'
+export {default as MobileNav} from './MobileNav'
+export {default as DesktopNav} from './DesktopNav'
+
 export {Login, Signup} from './auth-form'
