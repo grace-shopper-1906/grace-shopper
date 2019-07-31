@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import {getOneProduct} from '../store/oneProduct.js'
-import {Button} from 'semantic-ui-react'
+import {Container, Button, Rating} from 'semantic-ui-react'
 
 export class JustOneProduct extends React.Component {
   constructor(props) {
@@ -25,48 +25,49 @@ export class JustOneProduct extends React.Component {
   render() {
     let p = this.props.oneProduct
     const main = (
-      <div>
+      <Container>
         <Button type="Submit" onClick={this.backHomeButton}>
           Back to Home
         </Button>
-        <h1>Will be formatted in a minute chill</h1>
         <h1>Title {p.title}</h1>
-        <h1>Price {p.price}</h1>
-        <h1>How many left in stock {p.inventoryQuantity}</h1>
-        <h1>
+        <p>Price {p.price}</p>
+        <p>How many left in stock {p.inventoryQuantity}</p>
+        <div>
           Am I available?
           {p.isAvailable ? (
-            <p>Yes!</p>
+            <div>Yes!</div>
           ) : (
-            <p>Sorry, not available at this time</p>
+            <div>Sorry, not available at this time</div>
           )}
-        </h1>
-        <h1>Description {p.description}</h1>
+        </div>
+        <div>Description {p.description}</div>
         <img src={p.picture} />
-        <h1>This product belongs to the categories: </h1>
-        {p.categories ? (
-          <h1>
+        <div>This product belongs to the categories: </div>
+        {p.categories && p.categories.length ? (
+          <div>
             {p.categories.map(category => (
               <div key={category.id}>{category.name}</div>
             ))}
-          </h1>
+          </div>
         ) : (
           'This product belongs to no categories.'
         )}
-        <h1>This product belongs to the categories: </h1>
-        {p.reviews ? (
-          <h1>
+        <h1>Reviews: </h1>
+        {p.reviews && p.reviews.length ? (
+          <div>
             {p.reviews.map(review => (
               <div key={review.id}>
-                <p>Star given: {review.star}</p>
-                <p>Review: {review.text}</p>
+                <Rating icon="star" defaultRating={review.star} maxRating={5}>
+                  Star given: {review.star}
+                </Rating>
+                <div>Review: {review.text}</div>
               </div>
             ))}
-          </h1>
+          </div>
         ) : (
-          'This product belongs to no categories.'
+          'This product has no reviews.'
         )}
-      </div>
+      </Container>
     )
     return this.state.oneProduct ? 'Just a sec...' : main
   }
