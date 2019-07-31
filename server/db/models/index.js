@@ -19,8 +19,8 @@ Order.belongsTo(Sessions)
 User.hasOne(ShippingAddress)
 ShippingAddress.belongsTo(User)
 
-Order.hasMany(Product, {through: orderProduct})
-Product.hasMany(Order, {through: orderProduct})
+Order.belongsToMany(Product, {through: orderProduct})
+Product.belongsToMany(Order, {through: orderProduct})
 
 Product.hasMany(Review)
 Review.belongsTo(Product)

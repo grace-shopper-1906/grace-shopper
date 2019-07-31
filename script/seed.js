@@ -7,7 +7,8 @@ const {
   Product,
   Category,
   ShippingAddress,
-  Order
+  Order,
+  orderProduct
 } = require('../server/db/models')
 
 const faker = require('faker')
@@ -107,6 +108,18 @@ const createOrder = async () => {
   }
 }
 
+const createOrderProduct = async () => {
+  for (let i = 0; i < 100; i++) {
+    const orderProductRelationship = {
+      orderId: Math.floor(Math.random() * 100 + 1),
+      productId: Math.floor(Math.random() * 100 + 1),
+      quantity: Math.floor(Math.random() * 10 + 1),
+      productPrice: Math.floor(Math.random() * 100000 + 1)
+    }
+    await orderProduct.create(orderProductRelationship)
+  }
+}
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
@@ -118,6 +131,7 @@ async function seed() {
   await setCategoryOnProduct()
   await createShippingAddress()
   await createOrder()
+  await createOrderProduct()
 
   console.log(`seeded successfully`)
 }
