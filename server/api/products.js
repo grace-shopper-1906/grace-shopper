@@ -13,6 +13,8 @@ router.get('/:id', async (req, res, next) => {
     res.json(product)
   } catch (error) {
     next(error)
+  }
+})
 
 router.get('/', async (req, res, next) => {
   try {
