@@ -1,12 +1,34 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getOneProduct} from '../store/oneProduct'
-import {putCart} from '../store/cart'
+import {updateCartThunk} from '../store/cart'
 import {Item, Button, Dropdown, Container, Header} from 'semantic-ui-react'
 
 export const CartList = props => {
   // Going to use this to undateQuantity of items
-  const updateQuantity = products => {}
+  const updateQuantity = (num, item) => {
+    const orderProduct = {
+      quantity: num,
+      productId: item.id,
+      orderId: props.cart.id,
+      event: 'updateQuantity'
+    }
+    props.update(orderProduct)
+  }
+  const createDropdown = item => {
+    let options = []
+    for (let i = 1; i < 11; i++) {
+      options.push(
+        <Dropdown.Item
+          text={`${i}`}
+          value={i}
+          onClick={() => updateQuantity(i, item)}
+          key={i}
+        />
+      )
+    }
+    return options
+  }
   const products = props.cart.products
   return (
     <Container>
@@ -35,18 +57,7 @@ export const CartList = props => {
                     <Dropdown
                       text={`Quantity: ${item.order_product.quantity.toString()}`}
                     >
-                      <Dropdown.Menu>
-                        <Dropdown.Item text="1" va />
-                        <Dropdown.Item text="2" />
-                        <Dropdown.Item text="3" />
-                        <Dropdown.Item text="4" />
-                        <Dropdown.Item text="5" />
-                        <Dropdown.Item text="6" />
-                        <Dropdown.Item text="7" />
-                        <Dropdown.Item text="8" />
-                        <Dropdown.Item text="9" />
-                        <Dropdown.Item text="10" />
-                      </Dropdown.Menu>
+                      <Dropdown.Menu>{createDropdown(item)}</Dropdown.Menu>
                     </Dropdown>
                     <Button color="red">Delete Item</Button>
                   </Item.Description>
@@ -67,7 +78,7 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   getProduct: id => dispatch(getOneProduct(id)),
-  putCart: cart => dispatch(putCart(cart))
+  update: cart => dispatch(updateCartThunk(cart))
 })
 
 export default connect(mapState, mapDispatch)(CartList)

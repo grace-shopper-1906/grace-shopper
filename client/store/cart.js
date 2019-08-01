@@ -31,21 +31,14 @@ export const getCart = () => async dispatch => {
 
 export const updateCartThunk = cart => {
   return async dispatch => {
+    console.log('in cart store?', cart)
     try {
-      const {data} = await axios.put(`/api/cart/${cart.orderId}`, cart)
-      if (data !== '') dispatch(updateCart(data))
+      const response = await axios.put(`/api/cart/${cart.orderId}`, cart)
+      console.log('response?', response.data)
+      if (response.data !== '') dispatch(updateCart(response.data))
     } catch (err) {
       console.error(err)
     }
-  }
-}
-export const putCart = cart => async dispatch => {
-  try {
-    const response = await axios.put(`/api/cart/${cart.id}`, cart)
-    const updatedCart = response.data
-    dispatch(setCart(updatedCart))
-  } catch (err) {
-    console.error(err)
   }
 }
 
