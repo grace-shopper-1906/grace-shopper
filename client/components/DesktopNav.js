@@ -83,6 +83,9 @@ export default class DesktopNav extends Component {
                     >
                       Sign Up
                     </Button>
+                    <Button as={NavLink} exact to="#" onClick={handleClick}>
+                      Log Out
+                    </Button>
                   </Menu.Item>
                 )}
               </Container>

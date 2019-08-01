@@ -7,6 +7,12 @@ import AddToCart from './AddToCart'
 const ProductCard = props => {
   const product = props.product
 
+  const orderProducts = {
+    quantity: 1,
+    productId: product.id,
+    event: 'addProduct'
+  }
+
   const findReviewAvg = () => {
     let total = 0
     product.reviews.map(review => {
@@ -33,7 +39,7 @@ const ProductCard = props => {
           )}
         </Link>
         <br />
-        <AddToCart product={product} />
+        <AddToCart orderProducts={orderProducts} />
       </Card.Content>
     </Card>
   )
