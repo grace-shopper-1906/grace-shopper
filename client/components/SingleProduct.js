@@ -60,33 +60,30 @@ export class JustOneProduct extends React.Component {
               ) : (
                 'This product belongs to no categories.'
               )}
-              <h1>Reviews: </h1>
-              {p.reviews && p.reviews.length ? (
-                <div>
-                  {p.reviews.map(review => (
-                    <div key={review.id}>
-                      <Rating
-                        icon="star"
-                        defaultRating={review.star}
-                        maxRating={5}
-                      >
-                        Star given: {review.star}
-                      </Rating>
-                      <br />
-                      <div>Review: {review.text}</div>
-                      <br />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                'This product has no reviews.'
-              )}
             </Grid.Column>
             <Grid.Column>
               <Image src={p.picture} />
             </Grid.Column>
           </Grid>
         </Segment>
+
+        <h1>Reviews: </h1>
+        {p.reviews && p.reviews.length ? (
+          <div>
+            {p.reviews.map(review => (
+              <div key={review.id}>
+                <Rating icon="star" defaultRating={review.star} maxRating={5}>
+                  Star given: {review.star}
+                </Rating>
+                <br />
+                <div>Review: {review.text}</div>
+                <br />
+              </div>
+            ))}
+          </div>
+        ) : (
+          'This product has no reviews.'
+        )}
         <Button type="Submit" onClick={this.backHomeButton}>
           Back to Home
         </Button>
