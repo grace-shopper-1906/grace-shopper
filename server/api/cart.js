@@ -70,6 +70,9 @@ router.put('/:cartId', async (req, res, next) => {
         quantity: req.body.quantity
       })
     }
+    if (req.body.event === 'deleteItem') {
+      await productThrough.destroy()
+    }
     const newCart = await Order.findByPk(cart.id, {
       include: [{model: Product}]
     })
