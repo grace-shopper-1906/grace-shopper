@@ -9,5 +9,5 @@ export {default as MobileNav} from './MobileNav'
 export {default as DesktopNav} from './DesktopNav'
 
 export {Login, Signup} from './auth-form'
-export {SingleProduct} from './SingleProduct'
+export {default as SingleProduct} from './SingleProduct'
 export {default as CartList} from './CartList'

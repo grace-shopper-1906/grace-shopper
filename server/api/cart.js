@@ -29,7 +29,8 @@ router.get('/', async (req, res, next) => {
 router.put('/:cartId', async (req, res, next) => {
   console.log(req.body)
   try {
-    res.send('hi')
+    const order = await Order.findByPk(req.params.cartId)
+    await order.update(req.body)
   } catch (err) {
     next(err)
   }

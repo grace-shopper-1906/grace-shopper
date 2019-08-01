@@ -8,7 +8,7 @@ const SET_CART = 'GET_CART'
 /**
  * INITIAL STATE
  */
-const defaultCart = []
+const defaultCart = {}
 
 /**
  * ACTION CREATORS
@@ -22,6 +22,16 @@ export const getCart = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/cart')
     if (data !== '') dispatch(setCart(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const putCart = cart => async dispatch => {
+  try {
+    const response = await axios.put(`/api/cart/${cart.id}`, cart)
+    const updatedCart = response.data
+    dispatch(setCart(updatedCart))
   } catch (err) {
     console.error(err)
   }
