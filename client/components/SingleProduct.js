@@ -76,7 +76,7 @@ export class JustOneProduct extends React.Component {
                   Star given: {review.star}
                 </Rating>
                 <br />
-                <div>Review: {review.text}</div>
+                <div>{review.text}</div>
                 <br />
               </div>
             ))}
