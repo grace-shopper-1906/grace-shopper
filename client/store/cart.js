@@ -31,10 +31,8 @@ export const getCart = () => async dispatch => {
 
 export const updateCartThunk = cart => {
   return async dispatch => {
-    console.log('in cart store?', cart)
     try {
       const response = await axios.put(`/api/cart/${cart.orderId}`, cart)
-      console.log('response?', response.data)
       if (response.data !== '') dispatch(updateCart(response.data))
     } catch (err) {
       console.error(err)
