@@ -2,6 +2,7 @@ import React from 'react'
 import {Button, Card, Icon, Image} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import Stars from './Stars'
+import AddToCart from './AddToCart'
 
 const ProductCard = props => {
   const product = props.product
@@ -33,6 +34,8 @@ const ProductCard = props => {
           ) : (
             'No Reviews'
           )}
+          <br />
+          <AddToCart product={product} />
         </Card.Content>
       </Card>
     </Link>

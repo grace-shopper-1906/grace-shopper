@@ -48,6 +48,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default withRouter(
-  connect(mapState, mapDispatch)(DisconnectedAllProducts)
-)
+export default connect(mapState, mapDispatch)(DisconnectedAllProducts)

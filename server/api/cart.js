@@ -5,7 +5,6 @@ module.exports = router
 
 // Initial get cart method
 router.get('/', async (req, res, next) => {
-  console.log('session', req.sessionID)
   try {
     if (req.user) {
       const order = await Order.findOne({
@@ -25,11 +24,14 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// Update a cart
+//Create a cart - if no cart found, create on initial load. Also create new cart after user checks out
+
+// Add product to a cart
 router.put('/:cartId', async (req, res, next) => {
-  console.log(req.body)
   try {
-    res.send('hi')
+    const cart = await Order.findByPk(req.params.cartId)
+    const updatedCart = await cart.addProduct(req.body.productId)
+    res.status(204).json(updatedCart)
   } catch (err) {
     next(err)
   }
