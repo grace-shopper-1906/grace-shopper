@@ -14,7 +14,8 @@ class DisconnectedAddToCart extends React.Component {
     const orderProducts = {
       quantity: this.state.quantity,
       productId: this.props.product.id,
-      orderId: this.props.cart.id
+      orderId: this.props.cart.id,
+      event: 'addProduct'
     }
 
     return (
