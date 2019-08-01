@@ -58,7 +58,8 @@ const createUser = async () => {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      isAdmin: faker.random.boolean()
+      isAdmin: faker.random.boolean(),
+      shippingAddressId: Math.floor(Math.random() * 30 + 1)
     }
     await User.create(user)
   }
@@ -71,8 +72,8 @@ const createShippingAddress = async () => {
       city: faker.address.city(),
       zipCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      country: faker.address.country(),
-      userId: Math.floor(Math.random() * 30 + 1)
+      country: faker.address.country()
+      //userId: Math.floor(Math.random() * 30 + 1)
     }
     await ShippingAddress.create(shippingAddress)
   }
@@ -126,10 +127,10 @@ async function seed() {
 
   await createProduct()
   await createCategory()
+  await createShippingAddress()
   await createUser()
   await createReview()
   await setCategoryOnProduct()
-  await createShippingAddress()
   await createOrder()
   await createOrderProduct()
 

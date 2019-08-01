@@ -5,12 +5,12 @@ const ShippingAdress = require('../db/models/shippingAddress')
 
 router.get('/', async (req, res, next) => {
   try {
-    //const id = req.params.id
-    // const user = await User.findByPk(id, {
-    //   include: [{model: ShippingAdress}]
-    // })
-    // res.json(user)
-    res.json('hi')
+    const id = req.user.id
+    //const sessionId=req.sessionID
+    const user = await User.findByPk(id, {
+      include: [{model: ShippingAdress}]
+    })
+    res.json(user)
   } catch (error) {
     next(error)
   }

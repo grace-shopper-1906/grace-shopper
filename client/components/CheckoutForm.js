@@ -1,14 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {withRouter, Route, Switch} from 'react-router-dom'
-import {
-  Container,
-  Form,
-  Input,
-  TextArea,
-  Button,
-  Select
-} from 'semantic-ui-react'
+import {withRouter} from 'react-router-dom'
+import {Container, Form, Input, Button} from 'semantic-ui-react'
+import {getUserInfo} from '../store/checkout'
 
 export class CheckoutForm extends React.Component {
   constructor(props) {
@@ -18,10 +12,10 @@ export class CheckoutForm extends React.Component {
     this.backHomeButton = this.backHomeButton.bind(this)
   }
 
-  // componentDidMount() {
-  //   this.props.fetchOneProduct(this.props.match.params.id)
-  //   this.setState(this.props.match.params)
-  // }
+  componentDidMount() {
+    this.props.checkout()
+    this.setState(this.props.match.params)
+  }
 
   backHomeButton(event) {
     event.preventDefault()
@@ -29,6 +23,8 @@ export class CheckoutForm extends React.Component {
   }
 
   render() {
+    let u = this.props
+    console.log(u)
     const main = (
       <Container>
         <h1>Ship To:</h1>
@@ -94,6 +90,12 @@ export class CheckoutForm extends React.Component {
             content="Confirm"
             label=""
           />
+          <Form.Field
+            id="form-button-control-home"
+            control={Button}
+            content="home"
+            label=""
+          />
         </Form>
       </Container>
     )
@@ -101,14 +103,16 @@ export class CheckoutForm extends React.Component {
   }
 }
 
-//   const mapStateToProps = state => ({
-//     oneProduct: state.oneProduct
-//   })
+const mapStateToProps = state => ({
+  myUser: state.checkout
+})
 
-//   const mapDispatchToProps = dispatch => {
-//     return {
-//       fetchOneProduct: id => dispatch(getOneProduct(id))
-//     }
-//   }
+const mapDispatchToProps = dispatch => {
+  return {
+    checkout: () => dispatch(getUserInfo())
+  }
+}
 
-export default withRouter(connect(null)(CheckoutForm))
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(CheckoutForm)
+)
