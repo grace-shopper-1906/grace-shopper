@@ -10,4 +10,5 @@ export {default as DesktopNav} from './DesktopNav'
 
 export {Login, Signup} from './auth-form'
 export {default as SingleProduct} from './SingleProduct'
+export {default as AllProducts} from './AllProducts'
 export {default as CartList} from './CartList'

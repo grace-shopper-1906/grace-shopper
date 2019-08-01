@@ -1,15 +1,13 @@
 import React from 'react'
-import {Button, Card, Icon, Image} from 'semantic-ui-react'
+import {Card, Image} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import Stars from './Stars'
+import AddToCart from './AddToCart'
 
 const ProductCard = props => {
   const product = props.product
 
   const findReviewAvg = () => {
-    // if (!product.reviews.length) {
-    //   return 'No Reviews'
-    // }
     let total = 0
     product.reviews.map(review => {
       total += review.star
@@ -19,15 +17,12 @@ const ProductCard = props => {
   }
 
   return (
-    <Link to={`/products/${product.id}`} key={product.id}>
-      <Card
-        className="centered"
-        raised
-        key={product.id}
-        style={{margin: '1rem'}}
-      >
+    <Card className="centered" raised key={product.id} style={{margin: '1rem'}}>
+      <Link to={`/products/${product.id}`} key={product.id}>
         <Image centered size="medium" src={product.picture} />
-        <Card.Content>
+      </Link>
+      <Card.Content>
+        <Link to={`/products/${product.id}`} key={product.id}>
           <Card.Header>{product.title}</Card.Header>
           ${product.price / 100}
           <br />
@@ -36,9 +31,11 @@ const ProductCard = props => {
           ) : (
             'No Reviews'
           )}
-        </Card.Content>
-      </Card>
-    </Link>
+        </Link>
+        <br />
+        <AddToCart product={product} />
+      </Card.Content>
+    </Card>
   )
 }
 

@@ -52,12 +52,16 @@ export default class DesktopNav extends Component {
                 <Menu.Item as={NavLink} exact to="/products">
                   Products
                 </Menu.Item>
+                <Menu.Item as={NavLink} exact to="/cart/view">
+                  Cart
+                </Menu.Item>
                 {isLoggedIn ? (
                   <Container>
                     <Header>{firstName}</Header>
                     <Menu.Item as={NavLink} exact to="/orders">
                       Orders
                     </Menu.Item>
+
                     <Menu.Item as={NavLink} exact to="/account">
                       Account
                     </Menu.Item>
