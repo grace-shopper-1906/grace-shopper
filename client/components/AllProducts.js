@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
 import {Card, Container} from 'semantic-ui-react'
 import {fetchProductsThunk} from '../store'
 import ProductsCard from './ProductCard'
@@ -24,11 +23,7 @@ class DisconnectedAllProducts extends React.Component {
       <Container textAlign="center" style={{marginTop: '5rem'}}>
         <Card.Group stackable>
           {products.map(product => (
-            <ProductsCard
-              product={product}
-              key={product.id}
-              deleteCampus={this.props.deleteCampus}
-            />
+            <ProductsCard product={product} key={product.id} />
           ))}
         </Card.Group>
       </Container>

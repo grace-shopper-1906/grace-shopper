@@ -29,12 +29,14 @@ export const getCart = () => async dispatch => {
   }
 }
 
-export const updateCartThunk = cartBody => async dispatch => {
-  try {
-    const {data} = await axios.put(`/api/cart/${cartBody.orderId}`, cartBody)
-    if (data !== '') dispatch(updateCart(data))
-  } catch (err) {
-    console.error(err)
+export const updateCartThunk = cart => {
+  return async dispatch => {
+    try {
+      const {data} = await axios.put(`/api/cart/${cart.orderId}`, cart)
+      if (data !== '') dispatch(updateCart(data))
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 

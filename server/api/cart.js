@@ -27,11 +27,15 @@ router.get('/', async (req, res, next) => {
 //Create a cart - if no cart found, create on initial load. Also create new cart after user checks out
 
 // Add product to a cart
+//TODO: need to deal with case for product already existing on order
 router.put('/:cartId', async (req, res, next) => {
   try {
     const cart = await Order.findByPk(req.params.cartId)
-    const updatedCart = await cart.addProduct(req.body.productId)
-    res.status(204).json(updatedCart)
+    await cart.addProduct(req.body.productId)
+    const updatedCart = await Order.findByPk(req.params.cartId, {
+      include: [{model: Product}]
+    })
+    res.status(204).send(updatedCart)
   } catch (err) {
     next(err)
   }

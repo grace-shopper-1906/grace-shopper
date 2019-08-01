@@ -6,9 +6,9 @@ const Stars = props => {
   let stars = []
 
   for (let i = 1; i <= 5; i++) {
-    let currentStar = <Icon name="star" />
+    let currentStar = <Icon name="star" key={i} />
     if (i > numStars) {
-      currentStar = <Icon name="star outline" />
+      currentStar = <Icon name="star outline" key={i} />
     }
     stars.push(currentStar)
   }
