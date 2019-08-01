@@ -34,47 +34,59 @@ export class JustOneProduct extends React.Component {
     let p = this.props.oneProduct
     const main = (
       <Container>
-        <h1>Title {p.title}</h1>
-        <div className="fontBold">Price $ {p.price / 100.0}</div>
-        <div>
-          {p.inventoryQuantity} items left in stock. Product is
-          {p.isAvailable
-            ? ' available to order.'
-            : ' not available at this time.'}
-        </div>
-        <br />
-        <div>Item Description: {p.description}</div>
-        <br />
-        <img src={p.picture} />
-        <div className="fontItalics">
-          This product belongs to the categories:{' '}
-        </div>
-        {p.categories && p.categories.length ? (
-          <ul>
-            {p.categories.map(category => (
-              <li key={category.id}>{category.name}</li>
-            ))}
-          </ul>
-        ) : (
-          'This product belongs to no categories.'
-        )}
-        <h1>Reviews: </h1>
-        {p.reviews && p.reviews.length ? (
-          <div>
-            {p.reviews.map(review => (
-              <div key={review.id}>
-                <Rating icon="star" defaultRating={review.star} maxRating={5}>
-                  Star given: {review.star}
-                </Rating>
-                <br />
-                <div>Review: {review.text}</div>
-                <br />
+        <Segment>
+          <Grid columns={2} relaxed="very">
+            <Grid.Column>
+              <h1>Title {p.title}</h1>
+              <div className="fontBold">Price $ {p.price / 100.0}</div>
+              <div>
+                {p.inventoryQuantity} items left in stock. Product is
+                {p.isAvailable
+                  ? ' available to order.'
+                  : ' not available at this time.'}
               </div>
-            ))}
-          </div>
-        ) : (
-          'This product has no reviews.'
-        )}
+              <br />
+              <div>Item Description: {p.description}</div>
+              <br />
+              <div className="fontItalics">
+                This product belongs to the categories:{' '}
+              </div>
+              {p.categories && p.categories.length ? (
+                <ul>
+                  {p.categories.map(category => (
+                    <li key={category.id}>{category.name}</li>
+                  ))}
+                </ul>
+              ) : (
+                'This product belongs to no categories.'
+              )}
+              <h1>Reviews: </h1>
+              {p.reviews && p.reviews.length ? (
+                <div>
+                  {p.reviews.map(review => (
+                    <div key={review.id}>
+                      <Rating
+                        icon="star"
+                        defaultRating={review.star}
+                        maxRating={5}
+                      >
+                        Star given: {review.star}
+                      </Rating>
+                      <br />
+                      <div>Review: {review.text}</div>
+                      <br />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                'This product has no reviews.'
+              )}
+            </Grid.Column>
+            <Grid.Column>
+              <Image src={p.picture} />
+            </Grid.Column>
+          </Grid>
+        </Segment>
         <Button type="Submit" onClick={this.backHomeButton}>
           Back to Home
         </Button>
