@@ -29,7 +29,6 @@ export default class DesktopNav extends Component {
 
     return (
       <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
-        {console.log('logged in', isLoggedIn)}
         <Visibility
           once={false}
           onBottomPassed={this.showFixedMenu}
