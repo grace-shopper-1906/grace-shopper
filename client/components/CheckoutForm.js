@@ -1,19 +1,25 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {Container, Form, Input, Button} from 'semantic-ui-react'
-import {fetchShippingAddress} from '../store/checkout'
+import {fetchShippingAddress, updateShippingAddress} from '../store/checkout'
 
 export class CheckoutForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      firstName: this.props.user.firstName,
+      streetAddress: this.props.shippingAddress.streetAddress
+    }
 
     this.backHomeButton = this.backHomeButton.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentDidMount() {
     this.props.shippingA()
+    //this.setState(this.props.match.params)
   }
 
   backHomeButton(event) {
@@ -21,30 +27,55 @@ export class CheckoutForm extends React.Component {
     this.props.history.push('/')
   }
 
+  handleChange(event) {
+    // console.log('event.target')
+    // console.log(event.target)
+    // console.log('name')
+    // console.log(event.target.name)
+    // console.log('value')
+    // console.log(event.target.value)
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+    //console.log(this.state.streetAddress)
+    this.props.cShippingA(this.state)
+  }
+
+  // eslint-disable-next-line complexity
   render() {
     let u = this.props.user
     let sa = this.props.shippingAddress
-    console.log(u)
-    console.log(sa)
     const main = (
       <Container>
         <h1>Ship To:</h1>
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
           <Form.Group widths="equal">
             <Form.Field
-              id="form-input-control-firstName"
+              id="firstName"
+              name="firstName"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.firstName}
               control={Input}
               label="First name"
               placeholder={u.firstName || 'First Name'}
             />
             <Form.Field
-              id="form-input-control-lastName"
+              id="lastName"
+              name="lastName"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.lastName}
               control={Input}
               label="Last name"
               placeholder={u.lastName || 'Last Name'}
             />
             <Form.Field
-              id="form-input-control-email"
+              id="email"
               control={Input}
               label="Email"
               placeholder={u.email || 'Email'}
@@ -52,7 +83,11 @@ export class CheckoutForm extends React.Component {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              id="form-input-control-streetAddress"
+              id="streetAddress"
+              name="streetAddress"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.streetAddress}
               control={Input}
               label="Street Address"
               placeholder={sa.streetAddress || 'Street Address'}
@@ -60,25 +95,25 @@ export class CheckoutForm extends React.Component {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              id="form-input-control-city"
+              id="city"
               control={Input}
               label="City"
               placeholder={sa.city || 'City'}
             />
             <Form.Field
-              id="form-input-control-zipCode"
+              id="zipCode"
               control={Input}
               label="Zip Code"
               placeholder={sa.zipCode || 'Zip Code'}
             />
             <Form.Field
-              id="form-input-control-state"
+              id="state"
               control={Input}
               label="State"
               placeholder={sa.state || 'State'}
             />
             <Form.Field
-              id="form-input-control-country"
+              id="country"
               control={Input}
               label="Country"
               placeholder={sa.country || 'Country'}
@@ -89,12 +124,6 @@ export class CheckoutForm extends React.Component {
             id="form-button-control-public"
             control={Button}
             content="Confirm"
-            label=""
-          />
-          <Form.Field
-            id="form-button-control-home"
-            control={Button}
-            content="home"
             label=""
           />
         </Form>
@@ -111,7 +140,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    shippingA: () => dispatch(fetchShippingAddress())
+    shippingA: () => dispatch(fetchShippingAddress()),
+    cShippingA: address => dispatch(updateShippingAddress(address))
   }
 }
 
