@@ -7,8 +7,8 @@ export const getShippingAddress = address => ({
   address
 })
 
-export const fetchShippingAddress = id => async dispatch => {
-  const {data: address} = await axios.get(`/api/checkout`, id)
+export const fetchShippingAddress = () => async dispatch => {
+  const {data: address} = await axios.get(`/api/checkout`)
   dispatch(getShippingAddress(address))
 }
 

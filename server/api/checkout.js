@@ -4,8 +4,6 @@ const {ShippingAddress} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
-    //const id = req.body.id
-    console.log(req.user)
     //const sessionId=req.sessionID
     if (req.user) {
       const id = req.user.shippingAddressId

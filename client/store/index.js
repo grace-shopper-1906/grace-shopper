@@ -13,7 +13,7 @@ const reducer = combineReducers({
   products,
   cart,
   oneProduct: oneProductReducer,
-  checkout: checkoutReducer
+  shippingAddress: checkoutReducer
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
