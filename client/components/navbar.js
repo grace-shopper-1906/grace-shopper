@@ -5,10 +5,22 @@ import {logout} from '../store'
 import {DesktopNav, MobileNav} from './index'
 import {Container} from 'semantic-ui-react'
 
-const Navbar = ({children, handleClick, isLoggedIn, firstName}) => (
+const Navbar = ({handleClick, isLoggedIn, children, firstName}) => (
   <Container>
-    <DesktopNav>{(children, handleClick, isLoggedIn, firstName)}</DesktopNav>
-    <MobileNav>{(children, handleClick, isLoggedIn, firstName)}</MobileNav>
+    <DesktopNav
+      handleClick={handleClick}
+      isLoggedIn={isLoggedIn}
+      firstName={firstName}
+    >
+      {children}
+    </DesktopNav>
+    <MobileNav
+      handleClick={handleClick}
+      isLoggedIn={isLoggedIn}
+      firstName={firstName}
+    >
+      {children}
+    </MobileNav>
   </Container>
 )
 
