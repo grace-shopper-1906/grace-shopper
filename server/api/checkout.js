@@ -23,9 +23,18 @@ router.put('/', async (req, res, next) => {
       const uid = req.user.id
       const id = req.user.shippingAddressId
       const firstName = req.body.firstName
-      User.update({firstName}, {where: {id: uid}})
+      const lastName = req.body.lastName
+      const email = req.body.email
       const streetAddress = req.body.streetAddress
-      ShippingAddress.update({streetAddress}, {where: {id}})
+      const city = req.body.city
+      const zipCode = req.body.zipCode
+      const state = req.body.state
+      const country = req.body.country
+      User.update({firstName, lastName, email}, {where: {id: uid}})
+      ShippingAddress.update(
+        {streetAddress, city, zipCode, state, country},
+        {where: {id}}
+      )
       res.json('')
     }
   } catch (error) {

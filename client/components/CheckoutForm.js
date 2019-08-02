@@ -9,6 +9,12 @@ export class CheckoutForm extends React.Component {
     super(props)
     this.state = {
       firstName: this.props.user.firstName,
+      lastName: this.props.user.lastName,
+      email: this.props.user.email,
+      city: this.props.shippingAddress.city,
+      zipCode: this.props.shippingAddress.zipCode,
+      state: this.props.shippingAddress.state,
+      country: this.props.shippingAddress.country,
       streetAddress: this.props.shippingAddress.streetAddress
     }
 
@@ -19,7 +25,7 @@ export class CheckoutForm extends React.Component {
 
   componentDidMount() {
     this.props.shippingA()
-    //this.setState(this.props.match.params)
+    this.setState(this.props.match.params)
   }
 
   backHomeButton(event) {
@@ -28,12 +34,6 @@ export class CheckoutForm extends React.Component {
   }
 
   handleChange(event) {
-    // console.log('event.target')
-    // console.log(event.target)
-    // console.log('name')
-    // console.log(event.target.name)
-    // console.log('value')
-    // console.log(event.target.value)
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -41,7 +41,6 @@ export class CheckoutForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    //console.log(this.state.streetAddress)
     this.props.cShippingA(this.state)
   }
 
@@ -76,6 +75,10 @@ export class CheckoutForm extends React.Component {
             />
             <Form.Field
               id="email"
+              name="email"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.email}
               control={Input}
               label="Email"
               placeholder={u.email || 'Email'}
@@ -96,24 +99,40 @@ export class CheckoutForm extends React.Component {
           <Form.Group widths="equal">
             <Form.Field
               id="city"
+              name="city"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.city}
               control={Input}
               label="City"
               placeholder={sa.city || 'City'}
             />
             <Form.Field
               id="zipCode"
+              name="zipCode"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.zipCode}
               control={Input}
               label="Zip Code"
               placeholder={sa.zipCode || 'Zip Code'}
             />
             <Form.Field
               id="state"
+              name="state"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.state}
               control={Input}
               label="State"
               placeholder={sa.state || 'State'}
             />
             <Form.Field
               id="country"
+              name="country"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.country}
               control={Input}
               label="Country"
               placeholder={sa.country || 'Country'}
