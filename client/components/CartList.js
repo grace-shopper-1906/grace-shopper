@@ -3,7 +3,15 @@ import {connect} from 'react-redux'
 import {getOneProduct} from '../store/oneProduct'
 import {updateCartThunk} from '../store/cart'
 import {NavLink} from 'react-router-dom'
-import {Item, Button, Dropdown, Container, Header} from 'semantic-ui-react'
+import {PlaceOrderButton} from '../components'
+import {
+  Item,
+  Button,
+  Dropdown,
+  Container,
+  Header,
+  Message
+} from 'semantic-ui-react'
 
 class CartList extends React.Component {
   constructor() {
@@ -18,9 +26,13 @@ class CartList extends React.Component {
     this.calculateSubtotal = this.calculateSubtotal.bind(this)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log('update', prevState)
-    // going to call notenoughstock and if prevState.canCheckout !== the call then set state otherwise dont
+  componentDidUpdate() {
+    const checkout = this.notEnoughStock()
+    if (this.state.canCheckout !== checkout) {
+      this.setState({
+        canCheckout: checkout
+      })
+    }
   }
 
   updateQuantity(num, item) {
@@ -58,7 +70,16 @@ class CartList extends React.Component {
   }
 
   notEnoughStock() {
-    // will return bool as to if any products arent in stock
+    const products = this.props.cart.products
+    let result = true
+    if (products) {
+      products.forEach(item => {
+        if (item.inventoryQuantity < item.order_product.quantity) {
+          result = false
+        }
+      })
+    }
+    return result
   }
 
   calculateSubtotal() {
@@ -71,10 +92,17 @@ class CartList extends React.Component {
 
   render() {
     const products = this.props.cart.products
-    console.log(this.props)
     return (
       <Container>
         <h1>Your Cart</h1>
+        {!this.state.canCheckout && (
+          <Message negative>
+            <Message.Header>
+              One of your products doesn't have enough stock!
+            </Message.Header>
+            <p>Please fix your cart to checkout</p>
+          </Message>
+        )}
         <Item.Group>
           {products &&
             products.map(item => {
@@ -87,9 +115,13 @@ class CartList extends React.Component {
                     </Item.Header>
                     <Item.Meta>
                       Stock: {item.inventoryQuantity}{' '}
-                      {item.inventoryQuantity < item.order_product.quantity
-                        ? 'Not enough in stock!'
-                        : ''}
+                      {item.inventoryQuantity < item.order_product.quantity ? (
+                        <Message size="mini" negative compact>
+                          Not enough in stock
+                        </Message>
+                      ) : (
+                        ''
+                      )}
                     </Item.Meta>
                     <Item.Description>
                       <Header sub>Price: {`$${item.price / 100.0}`}</Header>
@@ -113,7 +145,10 @@ class CartList extends React.Component {
             })}
         </Item.Group>
         <h1>Subtotal: ${products && this.calculateSubtotal() / 100}</h1>
-        <Button color="green">Checkout</Button>
+        <PlaceOrderButton disabled={!this.state.canCheckout} />
+        {/* <Button color="green" disabled={!this.state.canCheckout}>
+          Checkout
+        </Button> */}
       </Container>
     )
   }

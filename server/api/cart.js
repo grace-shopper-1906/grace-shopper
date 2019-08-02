@@ -81,3 +81,42 @@ router.put('/:cartId', async (req, res, next) => {
     next(err)
   }
 })
+
+// does all the checkout work
+router.put('/checkout/:cartId', async (req, res, next) => {
+  try {
+    const cart = await Order.findOne({
+      where: {id: req.params.cartId},
+      include: [{model: Product}]
+    })
+    if (cart.status !== 'inCart') throw new Error('not a valid cart!')
+    let price = 0
+    await Promise.all(
+      cart.products.map(async item => {
+        await item.order_product.update({
+          productPrice: item.price
+        })
+        const product = await Product.findByPk(item.id)
+        await product.update({
+          inventoryQuantity:
+            product.inventoryQuantity - item.order_product.quantity
+        })
+        price += item.price * item.order_product.quantity
+        console.log('in loop', price)
+      })
+    )
+    // cart.product.map(item => {
+    //   price += item.price * item.order_product.quantity
+    //   console.log('in loop', price)
+    // })
+    console.log('out loop', price)
+    await cart.update({
+      totalPrice: price,
+      status: 'created',
+      dateOrdered: new Date()
+    })
+    res.status(202).send('Order Placed!')
+  } catch (err) {
+    next(err)
+  }
+})

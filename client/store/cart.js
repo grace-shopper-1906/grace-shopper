@@ -1,10 +1,12 @@
 import axios from 'axios'
+import history from '../history'
 
 /**
  * ACTION TYPES
  */
 const SET_CART = 'GET_CART'
 const UPDATE_CART = 'UPDATE_CART'
+const PLACE_ORDER = 'PLACE_ORDER'
 
 /**
  * INITIAL STATE
@@ -16,6 +18,7 @@ const defaultCart = {}
  */
 const setCart = cart => ({type: SET_CART, cart})
 const updateCart = cart => ({type: UPDATE_CART, cart})
+const placeOrder = () => ({type: PLACE_ORDER})
 
 /**
  * THUNK CREATORS
@@ -40,6 +43,18 @@ export const updateCartThunk = cart => {
   }
 }
 
+export const placeOrderThunk = cart => {
+  return async dispatch => {
+    try {
+      await axios.put(`/api/cart/checkout/${cart.id}`)
+      dispatch(placeOrder())
+      history.push(`/checkout/confirmation/${cart.id}`)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
 /**
  * REDUCER
  */
@@ -50,6 +65,9 @@ export default function(state = defaultCart, action) {
     }
     case UPDATE_CART: {
       return action.cart
+    }
+    case PLACE_ORDER: {
+      return {}
     }
     default:
       return state
