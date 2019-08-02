@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import {Container, Button, Form, Message} from 'semantic-ui-react'
+import {Container, Button, Form, Message, Icon} from 'semantic-ui-react'
 
 /**
  * COMPONENT
@@ -33,6 +33,13 @@ const AuthForm = props => {
       <Message attached="bottom" info compact>
         <a href="/auth/google">{displayName} with Google</a>
       </Message>
+      <br />
+      {displayName === 'Sign Up' && (
+        <Message attached="bottom" warning compact>
+          <Icon name="help" />
+          Already signed up?&nbsp;<a href="/login">Login here</a>&nbsp;instead.
+        </Message>
+      )}
     </Container>
   )
 }
