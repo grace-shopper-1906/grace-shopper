@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {Container, Form, Input, Button} from 'semantic-ui-react'
-import {getUserInfo} from '../store/checkout'
+import {getShippingAddress} from '../store/checkout'
 
 export class CheckoutForm extends React.Component {
   constructor(props) {
@@ -12,10 +12,10 @@ export class CheckoutForm extends React.Component {
     this.backHomeButton = this.backHomeButton.bind(this)
   }
 
-  componentDidMount() {
-    this.props.checkout()
-    this.setState(this.props.match.params)
-  }
+  // componentDidMount() {
+  //   this.props.shippingA()
+  //   this.setState(this.props.match.params)
+  // }
 
   backHomeButton(event) {
     event.preventDefault()
@@ -104,12 +104,12 @@ export class CheckoutForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  myUser: state.checkout
+  shippingAddress: state.shippingA
 })
 
 const mapDispatchToProps = dispatch => {
   return {
-    checkout: () => dispatch(getUserInfo())
+    shippingA: id => dispatch(getShippingAddress(id))
   }
 }
 

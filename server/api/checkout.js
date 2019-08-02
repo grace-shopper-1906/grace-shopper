@@ -1,16 +1,19 @@
 const router = require('express').Router()
 
-const User = require('../db/models/user')
-const ShippingAdress = require('../db/models/shippingAddress')
+const {ShippingAddress} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
-    const id = req.user.id
+    //const id = req.body.id
+    console.log(req.user)
     //const sessionId=req.sessionID
-    const user = await User.findByPk(id, {
-      include: [{model: ShippingAdress}]
-    })
-    res.json(user)
+    if (req.user) {
+      const id = req.user.shippingAddressId
+      const address = await ShippingAddress.findByPk(id)
+      res.json(address)
+    } else {
+      res.json(null)
+    }
   } catch (error) {
     next(error)
   }

@@ -1,22 +1,22 @@
 import axios from 'axios'
 
-const GET_USER_INFO = 'GET_USER_INFO'
+const GET_SHIPPING_ADDRESS = 'GET_SHIPPING_ADDRESS'
 
-export const setLoggedInUser = user => ({
-  type: GET_USER_INFO,
-  user
+export const getShippingAddress = address => ({
+  type: GET_SHIPPING_ADDRESS,
+  address
 })
 
-export const getUserInfo = () => async dispatch => {
-  const {data: user} = await axios.get(`/api/checkout`)
-  dispatch(setLoggedInUser(user))
+export const fetchShippingAddress = id => async dispatch => {
+  const {data: address} = await axios.get(`/api/checkout`, id)
+  dispatch(getShippingAddress(address))
 }
 
-export function checkoutReducer(user = '', action) {
+export function checkoutReducer(address = '', action) {
   switch (action.type) {
-    case GET_USER_INFO:
-      return action.user
+    case GET_SHIPPING_ADDRESS:
+      return action.address
     default:
-      return user
+      return address
   }
 }
