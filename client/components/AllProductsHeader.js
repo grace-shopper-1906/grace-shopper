@@ -1,6 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Input, Container, Header, Dropdown, Pagination} from 'semantic-ui-react'
+import {
+  Input,
+  Container,
+  Header,
+  Dropdown,
+  Pagination,
+  Button,
+  Icon
+} from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
 import {fetchProductsThunk, fetchCategoriesThunk} from '../store'
 import _ from 'lodash'
@@ -11,19 +19,21 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.state = {
       activePage: 1,
       filter: null,
-      sortBy: null
+      sortBy: null,
+      searchBy: null
     }
     this.updateFilter = this.updateFilter.bind(this)
     this.setCategoriesDropdown = this.setCategoriesDropdown.bind(this)
     this.handlePaginationChange = this.handlePaginationChange.bind(this)
     this.callThunk = this.callThunk.bind(this)
     this.sort = this.sort.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
     this.props.getCategories()
-    this.props.getProducts(this.state.activePage)
-    console.log('mount', this.props)
+    this.props.getProducts(this.state.activePage, this.state.filter)
+
     // const unparsed = this.props.location.search
     // const query = queryString(unparsed)
     // // query === { page: 1, category: 'jewels' }
@@ -48,35 +58,35 @@ class DisconnectedAllProductsHeader extends React.Component {
     return options
   }
 
-  sort(event) {
-    this.setState({sortBy: event.target.value})
+  handleChange(event) {
+    this.setState({searchBy: event.target.value})
   }
 
-  updateFilter(filter) {
-    console.log('filter', filter)
-    this.setState({
-      filter
-    })
-    console.log('filter state', this.state)
+  async sort(event) {
+    await this.setState({sortBy: event.target.innerText})
     this.callThunk()
   }
 
-  handlePaginationChange = (e, {activePage}) => {
-    this.setState({activePage})
-    console.log('pagination state', this.state)
+  async updateFilter(filter) {
+    await this.setState({
+      filter
+    })
+    this.callThunk()
+  }
+
+  async handlePaginationChange(e, {activePage}) {
+    await this.setState({activePage})
     this.callThunk()
   }
 
   callThunk() {
     console.log('inside call thunk', this.state)
-    // if (this.state.filter) {
-    //   this.props.history.push(
-    //     `/products?page=${this.state.activePage}&category=${this.state.filter}`
-    //   )
-    // } else {
-    //   this.props.history.push(`/products?page=${this.state.activePage}`)
-    // }
-    this.props.getProducts(this.state.activePage, this.state.filter)
+    this.props.getProducts(
+      this.state.activePage,
+      this.state.filter,
+      this.state.sortBy,
+      this.state.searchBy
+    )
   }
 
   render() {
@@ -86,22 +96,18 @@ class DisconnectedAllProductsHeader extends React.Component {
       <Container>
         <Header as="h2">All Products</Header>
         <Container textAlign="center" style={{marginBottom: '2rem'}} />
-        <Input
-          style={{margin: '1rem'}}
-          action={{icon: 'search'}}
-          placeholder="Search..."
-          onClick={this.search}
-        />
+        <Input placeholder="Search..." onChange={this.handleChange} />
+        <Button onClick={this.callThunk}>
+          <Icon name="search" />
+        </Button>
         <Dropdown
           style={{margin: '1rem'}}
           placeholder="Sort by..."
           search
           clearable
           options={[
-            {key: 1, text: 'Name', value: 'name'},
-            {key: 2, text: 'Rating', value: 'rating'},
-            {key: 3, text: 'Price (low to high)', value: 'price'},
-            {key: 4, text: 'Price (high to low)', value: 'priceDesc'}
+            {key: 1, text: 'Title', value: 'title'},
+            {key: 2, text: 'Price', value: 'price'}
           ]}
           selection
           onChange={this.sort}
@@ -114,6 +120,7 @@ class DisconnectedAllProductsHeader extends React.Component {
           options={this.setCategoriesDropdown()}
           selection
           onChange={event => {
+            console.log('event', event.target.innerText)
             this.updateFilter(event.target.innerText)
           }}
         />
@@ -150,9 +157,11 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getCategories: () => dispatch(fetchCategoriesThunk()),
-    getProducts: (page, category) =>
-      dispatch(fetchProductsThunk(page, category))
+    getProducts: (page, category, sortBy, searchBy) =>
+      dispatch(fetchProductsThunk(page, category, sortBy, searchBy))
   }
 }
 
-export default connect(mapState, mapDispatch)(DisconnectedAllProductsHeader)
+export default withRouter(
+  connect(mapState, mapDispatch)(DisconnectedAllProductsHeader)
+)
