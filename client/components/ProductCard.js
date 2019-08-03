@@ -37,6 +37,7 @@ const ProductCard = props => {
           ) : (
             'No Reviews'
           )}
+          {product.categories.join(',')}
         </Link>
         <br />
         <AddToCart orderProducts={orderProducts} />
