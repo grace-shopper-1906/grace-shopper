@@ -2,11 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Input, Container, Header, Dropdown, Pagination} from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
-import {
-  fetchProductsThunk,
-  fetchCategoriesThunk,
-  filterProductsThunk
-} from '../store'
+import {fetchProductsThunk, fetchCategoriesThunk} from '../store'
 import _ from 'lodash'
 
 class DisconnectedAllProductsHeader extends React.Component {
@@ -27,7 +23,7 @@ class DisconnectedAllProductsHeader extends React.Component {
   componentDidMount() {
     this.props.getCategories()
     this.props.getProducts(this.state.activePage)
-
+    console.log('mount', this.props)
     // const unparsed = this.props.location.search
     // const query = queryString(unparsed)
     // // query === { page: 1, category: 'jewels' }
@@ -51,6 +47,7 @@ class DisconnectedAllProductsHeader extends React.Component {
     })
     return options
   }
+
   sort(event) {
     this.setState({sortBy: event.target.value})
   }
@@ -60,25 +57,31 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.setState({
       filter
     })
-    console.log('state', this.state)
+    console.log('filter state', this.state)
     this.callThunk()
   }
 
   handlePaginationChange = (e, {activePage}) => {
     this.setState({activePage})
-    console.log('page state', this.state)
+    console.log('pagination state', this.state)
     this.callThunk()
   }
 
   callThunk() {
     console.log('inside call thunk', this.state)
-    this.props.history.push(
-      `/products/?page=${this.state.activePage}&category=${this.state.category}`
-    )
-    this.props.filterProducts(this.state.activePage, this.state.filter)
+    // if (this.state.filter) {
+    //   this.props.history.push(
+    //     `/products?page=${this.state.activePage}&category=${this.state.filter}`
+    //   )
+    // } else {
+    //   this.props.history.push(`/products?page=${this.state.activePage}`)
+    // }
+    this.props.getProducts(this.state.activePage, this.state.filter)
   }
 
   render() {
+    const {activePage} = this.state
+
     return (
       <Container>
         <Header as="h2">All Products</Header>
@@ -117,9 +120,9 @@ class DisconnectedAllProductsHeader extends React.Component {
         <Container textAlign="center" style={{marginBottom: '1rem'}}>
           <Container textAlign="center" style={{margin: '1rem'}}>
             <Pagination
-              activePage={this.state.activePage}
+              activePage={activePage}
               onPageChange={this.handlePaginationChange}
-              totalPages={10}
+              totalPages={this.props.pages}
             />
           </Container>
         </Container>
@@ -139,19 +142,17 @@ const mapState = state => {
 
   return {
     products: state.products,
-    categories: state.categories
+    categories: state.categories,
+    pages: state.products.pages
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getProducts: () => dispatch(fetchProductsThunk()),
     getCategories: () => dispatch(fetchCategoriesThunk()),
-    filterProducts: (page, category) =>
-      dispatch(filterProductsThunk(page, category))
+    getProducts: (page, category) =>
+      dispatch(fetchProductsThunk(page, category))
   }
 }
 
-export default withRouter(
-  connect(mapState, mapDispatch)(DisconnectedAllProductsHeader)
-)
+export default connect(mapState, mapDispatch)(DisconnectedAllProductsHeader)
