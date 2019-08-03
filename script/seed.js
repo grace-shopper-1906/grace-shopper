@@ -27,7 +27,7 @@ const createProduct = async () => {
 }
 
 const createCategory = async () => {
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 5; i++) {
     const category = {
       name: faker.commerce.department()
     }
