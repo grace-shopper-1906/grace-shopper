@@ -19,7 +19,7 @@ router.get('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    if (req.user.id) {
+    if (req.user) {
       const uid = req.user.id
       const id = req.user.shippingAddressId
       const firstName = req.body.firstName

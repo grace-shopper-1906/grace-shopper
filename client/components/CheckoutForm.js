@@ -7,6 +7,7 @@ import {fetchShippingAddress, updateShippingAddress} from '../store/checkout'
 export class CheckoutForm extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       firstName: this.props.user.firstName,
       lastName: this.props.user.lastName,
@@ -48,7 +49,7 @@ export class CheckoutForm extends React.Component {
   render() {
     let u = this.props.user
     let sa = this.props.shippingAddress
-    const main = (
+    const hasUser = (
       <Container>
         <h1>Ship To:</h1>
         <Form onSubmit={this.handleSubmit}>
@@ -148,7 +149,7 @@ export class CheckoutForm extends React.Component {
         </Form>
       </Container>
     )
-    return main
+    return this.props.user ? hasUser : 'not logged in'
   }
 }
 
