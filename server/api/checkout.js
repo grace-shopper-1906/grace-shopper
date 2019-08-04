@@ -5,7 +5,7 @@ const {User, ShippingAddress} = require('../db/models')
 router.get('/', async (req, res, next) => {
   try {
     //const sessionId=req.sessionID
-    if (req.user) {
+    if (req.user && req.user.id) {
       const id = req.user.shippingAddressId
       const address = await ShippingAddress.findByPk(id)
       res.json(address)
@@ -19,7 +19,7 @@ router.get('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    if (req.user) {
+    if (req.user && req.user.id) {
       const uid = req.user.id
       const id = req.user.shippingAddressId
       const firstName = req.body.firstName
@@ -30,8 +30,8 @@ router.put('/', async (req, res, next) => {
       const zipCode = req.body.zipCode
       const state = req.body.state
       const country = req.body.country
-      User.update({firstName, lastName, email}, {where: {id: uid}})
-      ShippingAddress.update(
+      await User.update({firstName, lastName, email}, {where: {id: uid}})
+      await ShippingAddress.update(
         {streetAddress, city, zipCode, state, country},
         {where: {id}}
       )
