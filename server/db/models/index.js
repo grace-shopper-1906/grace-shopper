@@ -15,8 +15,8 @@ Review.belongsTo(User)
 
 User.hasMany(Order)
 
-User.hasOne(ShippingAddress)
-ShippingAddress.belongsTo(User)
+ShippingAddress.hasOne(User)
+User.belongsTo(ShippingAddress)
 
 Order.belongsToMany(Product, {through: orderProduct})
 Product.belongsToMany(Order, {through: orderProduct})
