@@ -37,7 +37,7 @@ export class JustOneProduct extends React.Component {
         <Segment>
           <Grid columns={2} relaxed="very">
             <Grid.Column>
-              <h1>Title {p.title}</h1>
+              <h1>{p.title}</h1>
               <div className="fontBold">Price $ {p.price / 100.0}</div>
               <div>
                 {p.inventoryQuantity} items left in stock. Product is

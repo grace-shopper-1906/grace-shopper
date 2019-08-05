@@ -47,6 +47,7 @@ export class CheckoutForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault()
     this.props.cShippingA(this.state)
+    this.props.shippingA()
   }
 
   // eslint-disable-next-line complexity

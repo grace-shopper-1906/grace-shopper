@@ -4,6 +4,19 @@ const {User, ShippingAddress} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
+    const sessionId = req.sessionID
+    if (sessionId && !req.user) {
+      res.json(sessionId)
+    } else {
+      next()
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/', async (req, res, next) => {
+  try {
     //const sessionId=req.sessionID
     if (req.user && req.user.id) {
       const id = req.user.shippingAddressId
