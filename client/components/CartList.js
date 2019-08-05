@@ -51,7 +51,6 @@ class CartList extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const products = this.props.cart.products
     return (
       <Container>

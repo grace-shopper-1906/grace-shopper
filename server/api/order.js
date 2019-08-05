@@ -24,3 +24,17 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/cancel/:orderId', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.params.orderId)
+    if (req.user.id === order.userId) {
+      await order.update({
+        status: 'cancelled'
+      })
+    }
+    res.status(202).send('Order Cancelled')
+  } catch (err) {
+    next(err)
+  }
+})

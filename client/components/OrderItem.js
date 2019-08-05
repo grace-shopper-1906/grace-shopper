@@ -1,16 +1,17 @@
 import React from 'react'
 import {OrderProduct} from '../components'
-import {Item, Segment, Grid} from 'semantic-ui-react'
+import {cancelOrderThunk} from '../store/orders'
+import {connect} from 'react-redux'
+import {Item, Segment, Grid, Button} from 'semantic-ui-react'
 
 var moment = require('moment')
 
 export const OrderItem = props => {
   const order = props.order
-  console.log(order)
   return (
     <Segment.Group>
       <Segment>
-        <Grid columns={3}>
+        <Grid columns={4}>
           <Grid.Column>
             <h3>
               Order Placed: {moment(order.dateOrdered).format('MMMM Do YYYY')}
@@ -19,8 +20,19 @@ export const OrderItem = props => {
           <Grid.Column textAlign="center">
             <h3>Status: {order.status}</h3>
           </Grid.Column>
-          <Grid.Column textAlign="right">
+          <Grid.Column textAlign="center">
             <h3>Total Price: ${order.totalPrice / 100}</h3>
+          </Grid.Column>
+          <Grid.Column textAlign="right">
+            {order.status !== 'cancelled' && (
+              <Button
+                color="red"
+                size="tiny"
+                onClick={() => props.cancelOrder(order.id)}
+              >
+                Cancel Order
+              </Button>
+            )}
           </Grid.Column>
         </Grid>
       </Segment>
@@ -35,4 +47,8 @@ export const OrderItem = props => {
   )
 }
 
-export default OrderItem
+const mapDispatch = dispatch => ({
+  cancelOrder: orderId => dispatch(cancelOrderThunk(orderId))
+})
+
+export default connect(null, mapDispatch)(OrderItem)
