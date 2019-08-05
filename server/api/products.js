@@ -15,6 +15,7 @@ router.get('/', async (req, res, next) => {
   const SEARCH_FILTER = req.query.searchBy
   const SORT_BY = req.query.sortBy || 'id'
 
+  //create dynamic query
   const createQuery = () => {
     if (CATEGORY_FILTER) {
       var categoryQuery = {
@@ -35,6 +36,7 @@ router.get('/', async (req, res, next) => {
   const query = createQuery()
 
   try {
+    //get number of pages
     const data = await Product.findAndCountAll({
       include: [
         {
@@ -46,6 +48,7 @@ router.get('/', async (req, res, next) => {
     })
     const pages = Math.ceil(data.count / PAGE_SIZE)
 
+    //get first page
     const results = await Product.findAll({
       include: [
         {model: Reviews},
