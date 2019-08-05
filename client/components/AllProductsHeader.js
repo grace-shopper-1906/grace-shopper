@@ -80,7 +80,6 @@ class DisconnectedAllProductsHeader extends React.Component {
   }
 
   callThunk() {
-    console.log('inside call thunk', this.state)
     this.props.getProducts(
       this.state.activePage,
       this.state.filter,
@@ -120,7 +119,6 @@ class DisconnectedAllProductsHeader extends React.Component {
           options={this.setCategoriesDropdown()}
           selection
           onChange={event => {
-            console.log('event', event.target.innerText)
             this.updateFilter(event.target.innerText)
           }}
         />
