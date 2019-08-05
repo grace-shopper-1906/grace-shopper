@@ -1,5 +1,4 @@
 const router = require('express').Router()
-
 const Product = require('../db/models/product')
 const Reviews = require('../db/models/review')
 const Category = require('../db/models/category')
@@ -16,132 +15,53 @@ router.get('/', async (req, res, next) => {
   const SEARCH_FILTER = req.query.searchBy
   const SORT_BY = req.query.sortBy || 'id'
 
-  if (!req.query.searchBy && !req.query.category) {
-    try {
-      const data = await Product.findAndCountAll()
-      const pages = Math.ceil(data.count / PAGE_SIZE)
-
-      const results = await Product.findAll({
-        include: [{all: true}],
-        order: [SORT_BY],
-        limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE
-      })
-      res.json({results, pages})
-    } catch (error) {
-      next(error)
-    }
-  }
-  if (req.query.category && req.query.searchBy) {
-    try {
-      const data = await Product.findAndCountAll({
-        include: [
-          {
-            model: Category,
-            where: {
-              name: {
-                [Sequelize.Op.in]: [CATEGORY_FILTER]
-              }
-            }
-          }
-        ],
-        where: {
-          title: {
-            [Sequelize.Op.startsWith]: SEARCH_FILTER
-          }
+  const createQuery = () => {
+    if (CATEGORY_FILTER) {
+      var categoryQuery = {
+        name: {
+          [Sequelize.Op.in]: [CATEGORY_FILTER]
         }
-      })
-      const pages = Math.ceil(data.count / PAGE_SIZE)
-
-      const results = await Product.findAll({
-        include: [
-          {
-            model: Category,
-            where: {
-              name: {
-                [Sequelize.Op.in]: [CATEGORY_FILTER]
-              }
-            }
-          },
-          {model: Reviews}
-        ],
-        where: {
-          title: {
-            [Sequelize.Op.startsWith]: SEARCH_FILTER
-          }
-        },
-        order: [SORT_BY],
-        limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE
-      })
-      res.json({results, pages})
-    } catch (error) {
-      next(error)
+      }
     }
-  }
-  if (req.query.category) {
-    try {
-      const data = await Product.findAndCountAll({
-        include: [
-          {
-            model: Category,
-            where: {
-              name: {
-                [Sequelize.Op.in]: [CATEGORY_FILTER]
-              }
-            }
-          }
-        ]
-      })
-      const pages = Math.ceil(data.count / PAGE_SIZE)
-
-      const results = await Product.findAll({
-        include: [
-          {
-            model: Category,
-            where: {
-              name: {
-                [Sequelize.Op.in]: [CATEGORY_FILTER]
-              }
-            }
-          },
-          {model: Reviews}
-        ],
-        order: [SORT_BY],
-        limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE
-      })
-      res.json({results, pages})
-    } catch (error) {
-      next(error)
-    }
-  }
-  if (req.query.searchBy) {
-    try {
-      const data = await Product.findAndCountAll({
-        where: {
-          title: {
-            [Sequelize.Op.startsWith]: SEARCH_FILTER
-          }
+    if (SEARCH_FILTER) {
+      var searchQuery = {
+        title: {
+          [Sequelize.Op.iLike]: `%${SEARCH_FILTER}%`
         }
-      })
-      const pages = Math.ceil(data.count / PAGE_SIZE)
-
-      const results = await Product.findAll({
-        include: [{all: true}],
-        where: {
-          title: {
-            [Sequelize.Op.startsWith]: SEARCH_FILTER
-          }
-        },
-        order: [SORT_BY],
-        limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE
-      })
-      res.json({results, pages})
-    } catch (error) {
-      next(error)
+      }
     }
+    return {searchQuery, categoryQuery}
+  }
+  const query = createQuery()
+
+  try {
+    const data = await Product.findAndCountAll({
+      include: [
+        {
+          model: Category,
+          where: query.categoryQuery
+        }
+      ],
+      where: query.searchQuery
+    })
+    const pages = Math.ceil(data.count / PAGE_SIZE)
+
+    const results = await Product.findAll({
+      include: [
+        {model: Reviews},
+        {
+          model: Category,
+          where: query.categoryQuery
+        }
+      ],
+      where: query.searchQuery,
+      order: [SORT_BY],
+      limit: PAGE_SIZE,
+      offset: (page - 1) * PAGE_SIZE
+    })
+    res.json({results, pages})
+  } catch (error) {
+    next(error)
   }
 })
 

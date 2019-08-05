@@ -77,7 +77,6 @@ const createShippingAddress = async () => {
       zipCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
       country: faker.address.country()
-      //userId: Math.floor(Math.random() * 30 + 1)
     }
     await ShippingAddress.create(shippingAddress)
   }
