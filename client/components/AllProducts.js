@@ -1,26 +1,25 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Container} from 'semantic-ui-react'
-import {fetchProductsThunk} from '../store'
 import ProductsCard from './ProductCard'
+import AllProductsHeader from './AllProductsHeader'
+import {withRouter} from 'react-router-dom'
 
 class DisconnectedAllProducts extends React.Component {
-  componentDidMount() {
-    this.props.getProducts()
-  }
-
   render() {
     const products = this.props.products
 
     if (!products || products.length === 0) {
       return (
         <Container textAlign="center" style={{marginTop: '5rem'}}>
+          <AllProductsHeader />
           <p>No Products Found</p>
         </Container>
       )
     }
     return (
       <Container textAlign="center" style={{marginTop: '5rem'}}>
+        <AllProductsHeader />
         <Card.Group stackable>
           {products.map(product => (
             <ProductsCard product={product} key={product.id} />
@@ -33,14 +32,8 @@ class DisconnectedAllProducts extends React.Component {
 
 const mapState = state => {
   return {
-    products: state.products
+    products: state.products.items
   }
 }
 
-const mapDispatch = dispatch => {
-  return {
-    getProducts: () => dispatch(fetchProductsThunk())
-  }
-}
-
-export default connect(mapState, mapDispatch)(DisconnectedAllProducts)
+export default withRouter(connect(mapState)(DisconnectedAllProducts))
