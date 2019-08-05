@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Button} from 'semantic-ui-react'
+import {Button, Icon} from 'semantic-ui-react'
 import {updateCartThunk} from '../store/cart'
 
 class DisconnectedAddToCart extends React.Component {
@@ -13,7 +13,8 @@ class DisconnectedAddToCart extends React.Component {
           this.props.addToCart(this.props.orderProducts)
         }}
       >
-        Add to Cart
+        <Icon loading name="cart arrow down" />
+        {this.props.buyItAgain ? 'Buy it Again' : 'Add to Cart'}
       </Button>
     )
   }
