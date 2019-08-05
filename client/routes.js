@@ -9,6 +9,7 @@ import {Container} from 'semantic-ui-react'
 import {me} from './store'
 import {getCart} from './store/cart'
 import AllProducts from './components/AllProducts'
+import CheckoutForm from './components/CheckoutForm'
 
 /**
  * COMPONENT
@@ -30,6 +31,7 @@ class Routes extends Component {
         <Route path="/products/:id" component={SingleProduct} />
         <Route exact path="/cart/view" component={CartList} />
         <Route exact path="/products" component={AllProducts} />
+        <Route exact path="/checkout" component={CheckoutForm} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
