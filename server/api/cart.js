@@ -44,8 +44,71 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// Create a cart - if no cart found, create on initial load. Also create new cart after user checks out
-// Add product to a cart
+router.put('/merge', async (req, res, next) => {
+  try {
+    const sessionCart = await Order.findOne({
+      where: {sessionId: req.sessionID, status: 'inCart'},
+      include: [{model: Product}]
+    })
+    //if there is a session cart without a user id
+    if (!sessionCart.dataValues.userId && sessionCart) {
+      let sessionProducts = []
+
+      //SESSION CART - store just the product ID and quantity in an object
+      sessionCart.dataValues.products.map(product =>
+        sessionProducts.push({
+          id: product.order_product.dataValues.productId,
+          quantity: product.order_product.dataValues.quantity
+        })
+      )
+      //USER CART - store just the product ID and quantity in an object
+      const userCart = await findOrCreateCart(req)
+      let userProducts = []
+      userCart.products.map(product =>
+        userProducts.push({
+          id: product.order_product.dataValues.productId,
+          quantity: product.order_product.dataValues.quantity
+        })
+      )
+      const userProductIds = userProducts.map(product => product.id)
+
+      //check the session products
+      sessionProducts.map(async product => {
+        //if the session product isn't in the user products, create it on the user cart
+        if (!userProductIds.includes(product.id)) {
+          await orderProduct.create({
+            quantity: product.quantity,
+            orderId: userCart.id,
+            productId: product.id
+          })
+
+          //else if the quantity from the session is different from the quantity of the user cart, add them
+        } else if (
+          userProducts.find(item => item.id === product.id).quantity !==
+          product.quantity
+        ) {
+          const productToUpdate = await orderProduct.findOne({
+            where: {orderId: userCart.id, productId: product.id}
+          })
+          await productToUpdate.update({
+            quantity:
+              userProducts.find(item => item.id === product.id).quantity +
+              product.quantity
+          })
+        }
+      })
+
+      //return the updated cart
+      const newCart = await Order.findByPk(userCart.id, {
+        include: [{model: Product}]
+      })
+      res.send(newCart)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.put('/:cartId', async (req, res, next) => {
   try {
     const cart = await findOrCreateCart(req)
