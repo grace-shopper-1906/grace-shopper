@@ -8,19 +8,15 @@ export class CheckoutForm extends React.Component {
   constructor(props) {
     super(props)
 
-    if (this.props.user) {
-      this.state = {
-        firstName: this.props.user.firstName,
-        lastName: this.props.user.lastName,
-        email: this.props.user.email,
-        city: this.props.shippingAddress.city,
-        zipCode: this.props.shippingAddress.zipCode,
-        state: this.props.shippingAddress.state,
-        country: this.props.shippingAddress.country,
-        streetAddress: this.props.shippingAddress.streetAddress
-      }
-    } else {
-      this.state = {}
+    this.state = {
+      firstName: this.props.user.firstName,
+      lastName: this.props.user.lastName,
+      email: this.props.user.email,
+      city: this.props.shippingAddress.city,
+      zipCode: this.props.shippingAddress.zipCode,
+      state: this.props.shippingAddress.state,
+      country: this.props.shippingAddress.country,
+      streetAddress: this.props.shippingAddress.streetAddress
     }
 
     this.backHomeButton = this.backHomeButton.bind(this)
@@ -31,6 +27,15 @@ export class CheckoutForm extends React.Component {
   componentDidMount() {
     this.props.shippingA()
     this.setState(this.props.match.params)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.shippingAddress) {
+      if (this.props.shippingAddress !== nextProps.shippingAddress) {
+        console.log('setting shipping state', nextProps.shippingAddress)
+        this.setState(nextProps.shippingAddress)
+      }
+    }
   }
 
   backHomeButton(event) {
@@ -54,6 +59,9 @@ export class CheckoutForm extends React.Component {
   render() {
     //let u = this.props.user
     //let sa = this.props.shippingAddress
+    if (!this.props.shippingAddress) {
+      return <div>Loading</div>
+    }
     const hasUser = (
       <Container>
         <h1>Ship To:</h1>
@@ -67,7 +75,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.firstName}
               control={Input}
               label="First name"
-              placeholder={this.props.user.firstName || 'First Name'}
+              placeholder="First Name"
             />
             <Form.Field
               id="lastName"
@@ -77,7 +85,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.lastName}
               control={Input}
               label="Last name"
-              placeholder={this.props.user.lastName || 'Last Name'}
+              placeholder="Last Name"
             />
             <Form.Field
               id="email"
@@ -87,7 +95,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.email}
               control={Input}
               label="Email"
-              placeholder={this.props.user.email || 'Email'}
+              placeholder="Email"
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -99,9 +107,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.streetAddress}
               control={Input}
               label="Street Address"
-              placeholder={
-                this.props.shippingAddress.streetAddress || 'Street Address'
-              }
+              placeholder="Street Address"
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -113,7 +119,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.city}
               control={Input}
               label="City"
-              placeholder={this.props.shippingAddress.city || 'City'}
+              placeholder="City"
             />
             <Form.Field
               id="zipCode"
@@ -123,7 +129,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.zipCode}
               control={Input}
               label="Zip Code"
-              placeholder={this.props.shippingAddress.zipCode || 'Zip Code'}
+              placeholder="Zip Code"
             />
             <Form.Field
               id="state"
@@ -133,7 +139,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.state}
               control={Input}
               label="State"
-              placeholder={this.props.shippingAddress.state || 'State'}
+              placeholder="State"
             />
             <Form.Field
               id="country"
@@ -143,7 +149,7 @@ export class CheckoutForm extends React.Component {
               value={this.state.country}
               control={Input}
               label="Country"
-              placeholder={this.props.shippingAddress.country || 'Country'}
+              placeholder="Country"
             />
           </Form.Group>
 
@@ -156,7 +162,8 @@ export class CheckoutForm extends React.Component {
         </Form>
       </Container>
     )
-    return this.props.user ? hasUser : 'not logged in'
+    //return hasUser
+    return hasUser
   }
 }
 
