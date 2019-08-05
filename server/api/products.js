@@ -16,8 +16,6 @@ router.get('/', async (req, res, next) => {
   const SEARCH_FILTER = req.query.searchBy
   const SORT_BY = req.query.sortBy || 'id'
 
-  console.log('query', req.query)
-
   if (!req.query.searchBy && !req.query.category) {
     try {
       const data = await Product.findAndCountAll()

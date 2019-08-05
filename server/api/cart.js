@@ -73,30 +73,32 @@ router.put('/merge', async (req, res, next) => {
       const userProductIds = userProducts.map(product => product.id)
 
       //check the session products
-      sessionProducts.map(async product => {
-        //if the session product isn't in the user products, create it on the user cart
-        if (!userProductIds.includes(product.id)) {
-          await orderProduct.create({
-            quantity: product.quantity,
-            orderId: userCart.id,
-            productId: product.id
-          })
+      await Promise.all(
+        sessionProducts.map(async product => {
+          //if the session product isn't in the user products, create it on the user cart
+          if (!userProductIds.includes(product.id)) {
+            await orderProduct.create({
+              quantity: product.quantity,
+              orderId: userCart.id,
+              productId: product.id
+            })
 
-          //else if the quantity from the session is different from the quantity of the user cart, add them
-        } else if (
-          userProducts.find(item => item.id === product.id).quantity !==
-          product.quantity
-        ) {
-          const productToUpdate = await orderProduct.findOne({
-            where: {orderId: userCart.id, productId: product.id}
-          })
-          await productToUpdate.update({
-            quantity:
-              userProducts.find(item => item.id === product.id).quantity +
-              product.quantity
-          })
-        }
-      })
+            //else if the quantity from the session is different from the quantity of the user cart, add them
+          } else if (
+            userProducts.find(item => item.id === product.id).quantity !==
+            product.quantity
+          ) {
+            const productToUpdate = await orderProduct.findOne({
+              where: {orderId: userCart.id, productId: product.id}
+            })
+            await productToUpdate.update({
+              quantity:
+                userProducts.find(item => item.id === product.id).quantity +
+                product.quantity
+            })
+          }
+        })
+      )
 
       //return the updated cart
       const newCart = await Order.findByPk(userCart.id, {

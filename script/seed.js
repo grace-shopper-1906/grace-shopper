@@ -27,11 +27,15 @@ const createProduct = async () => {
 }
 
 const createCategory = async () => {
+  let categories = []
   for (let i = 0; i < 5; i++) {
     const category = {
       name: faker.commerce.department()
     }
-    await Category.create(category)
+    if (!categories.includes(category)) {
+      categories.push(category)
+      await Category.create(category)
+    }
   }
 }
 

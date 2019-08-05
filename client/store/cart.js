@@ -26,7 +26,6 @@ const mergeCart = cart => ({type: MERGE_CART, cart})
  * THUNK CREATORS
  */
 export const mergeCartThunk = () => async dispatch => {
-  console.log('inside thunk')
   const response = await axios.put(`/api/cart/merge`)
   if (response.data !== '') dispatch(mergeCart(response.data))
 }
