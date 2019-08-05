@@ -31,3 +31,8 @@ form div {
 .fontBold {
   font-weight: bold;
 }
+
+.reviewSize {
+  width: 100em;
+  height: 25em;
+}
