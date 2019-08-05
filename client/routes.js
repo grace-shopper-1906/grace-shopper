@@ -7,6 +7,7 @@ import SingleProduct from './components/SingleProduct'
 import {me} from './store'
 import AllProducts from './components/AllProducts'
 import CheckoutForm from './components/CheckoutForm'
+import ReviewForm from './components/ReviewForm'
 
 /**
  * COMPONENT
@@ -33,6 +34,7 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route exact path="/checkout" component={CheckoutForm} />
             <Route path="/orders" component={OrdersList} />
+            <Route path="/review" component={ReviewForm} />
             {/* <Route path="/checkout/confirmation/:cartId" component={OrderConfirmation}/>  */}
           </Switch>
         )}
