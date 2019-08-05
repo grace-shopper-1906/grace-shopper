@@ -7,12 +7,14 @@ import {Container} from 'semantic-ui-react'
  * COMPONENT
  */
 export const UserHome = props => {
-  const {email} = props
+  const {email, firstName} = props
 
   return (
-    <div>
-      <h3>Welcome, {email}</h3>
-    </div>
+    <Container>
+      <h3>
+        Welcome, {firstName} {email}
+      </h3>
+    </Container>
   )
 }
 
@@ -21,7 +23,8 @@ export const UserHome = props => {
  */
 const mapState = state => {
   return {
-    email: state.user.email
+    email: state.user.email,
+    firstName: state.user.firstName
   }
 }
 

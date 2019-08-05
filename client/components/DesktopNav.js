@@ -4,10 +4,8 @@ import {
   Segment,
   Container,
   Button,
-  Visibility,
-  Header
+  Visibility
 } from 'semantic-ui-react'
-import PropTypes from 'prop-types'
 import React, {Component} from 'react'
 import {NavLink} from 'react-router-dom'
 
@@ -24,7 +22,7 @@ export default class DesktopNav extends Component {
   showFixedMenu = () => this.setState({fixed: true})
 
   render() {
-    const {children, handleClick, isLoggedIn, firstName} = this.props
+    const {handleClick, isLoggedIn} = this.props
     const {fixed} = this.state
 
     return (
@@ -56,19 +54,19 @@ export default class DesktopNav extends Component {
                   Cart
                 </Menu.Item>
                 {isLoggedIn ? (
-                  <Container>
-                    <Header>{firstName}</Header>
+                  <Menu.Menu position="right">
                     <Menu.Item as={NavLink} exact to="/orders">
                       Orders
                     </Menu.Item>
-
                     <Menu.Item as={NavLink} exact to="/account">
                       Account
                     </Menu.Item>
-                    <Button as={NavLink} exact to="#" onClick={handleClick}>
-                      Log Out
-                    </Button>
-                  </Container>
+                    <Menu.Item position="right">
+                      <Button as={NavLink} exact to="#" onClick={handleClick}>
+                        Log Out
+                      </Button>
+                    </Menu.Item>
+                  </Menu.Menu>
                 ) : (
                   <Menu.Item position="right">
                     <Button as={NavLink} exact to="/account">
@@ -89,12 +87,7 @@ export default class DesktopNav extends Component {
             </Menu>
           </Segment>
         </Visibility>
-        {children}
       </Responsive>
     )
   }
-}
-
-DesktopNav.propTypes = {
-  children: PropTypes.node
 }

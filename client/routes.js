@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, CartList} from './components'
 import SingleProduct from './components/SingleProduct'
 
+import {Container} from 'semantic-ui-react'
 import {me} from './store'
 import {getCart} from './store/cart'
 import AllProducts from './components/AllProducts'
@@ -35,6 +36,7 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            {/* <Route path="/checkout/confirmation/:cartId" component={OrderConfirmation}/>  */}
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
@@ -44,9 +46,6 @@ class Routes extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
 const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.

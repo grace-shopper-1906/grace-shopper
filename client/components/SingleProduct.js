@@ -1,22 +1,25 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
-import {withRouter, Route, Switch} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {getOneProduct} from '../store/oneProduct.js'
 import {
   Container,
   Button,
   Rating,
-  Divider,
   Grid,
   Image,
-  Segment
+  Segment,
+  Dropdown
 } from 'semantic-ui-react'
+import AddToCart from './AddToCart.js'
+import {updateCartThunk} from '../store/cart'
 
 export class JustOneProduct extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-
+  constructor() {
+    super()
+    this.state = {
+      quantity: 1
+    }
     this.backHomeButton = this.backHomeButton.bind(this)
   }
 
@@ -27,11 +30,35 @@ export class JustOneProduct extends React.Component {
 
   backHomeButton(event) {
     event.preventDefault()
-    console.log(this.props.history.push('/'))
+    this.props.history.push('/')
+  }
+
+  handleChange = (e, {value}) => {
+    this.setState({quantity: value})
+  }
+
+  createDropdown = () => {
+    let options = []
+    for (let i = 1; i < 11; i++) {
+      options.push({
+        text: i,
+        value: i,
+        onClick: this.handleChange,
+        key: i
+      })
+    }
+    return options
   }
 
   render() {
     let p = this.props.oneProduct
+
+    const orderProducts = {
+      quantity: this.state.quantity,
+      productId: p.id,
+      event: 'addProduct'
+    }
+
     const main = (
       <Container>
         <Segment>
@@ -60,6 +87,13 @@ export class JustOneProduct extends React.Component {
               ) : (
                 'This product belongs to no categories.'
               )}
+              <Dropdown
+                text={`Quantity: ${this.state.quantity}`}
+                selection
+                inline
+                options={this.createDropdown()}
+              />
+              <AddToCart orderProducts={orderProducts} />
             </Grid.Column>
             <Grid.Column>
               <Image src={p.picture} />
@@ -72,7 +106,12 @@ export class JustOneProduct extends React.Component {
           <div>
             {p.reviews.map(review => (
               <div key={review.id}>
-                <Rating icon="star" defaultRating={review.star} maxRating={5}>
+                <Rating
+                  icon="star"
+                  defaultRating={review.star}
+                  maxRating={5}
+                  disabled
+                >
                   Star given: {review.star}
                 </Rating>
                 <br />
@@ -101,7 +140,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOneProduct: id => dispatch(getOneProduct(id))
+    fetchOneProduct: id => dispatch(getOneProduct(id)),
+    update: cart => dispatch(updateCartThunk(cart))
   }
 }
 
