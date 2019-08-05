@@ -53,7 +53,7 @@ export default function(state = defaultOrders, action) {
       const newState = [...state]
       return newState.map(order => {
         if (order.id === action.orderId) {
-          let newOrder = order
+          let newOrder = {...order}
           newOrder.status = 'cancelled'
           return newOrder
         } else return order

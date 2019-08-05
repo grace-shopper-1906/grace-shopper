@@ -8,7 +8,7 @@ const _ = require('lodash/lang')
 
 class OrdersList extends Component {
   componentDidMount() {
-    if (_.isEmpty(this.props.orders)) this.props.getOrders()
+    this.props.getOrders()
   }
 
   componentDidUpdate() {

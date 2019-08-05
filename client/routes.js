@@ -6,6 +6,7 @@ import {Login, Signup, UserHome, CartList, OrdersList} from './components'
 import SingleProduct from './components/SingleProduct'
 import {me} from './store'
 import AllProducts from './components/AllProducts'
+import CheckoutForm from './components/CheckoutForm'
 
 /**
  * COMPONENT
@@ -26,6 +27,7 @@ class Routes extends Component {
         <Route path="/products/:id" component={SingleProduct} />
         <Route exact path="/cart/view" component={CartList} />
         <Route exact path="/products" component={AllProducts} />
+        <Route exact path="/checkout" component={CheckoutForm} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}

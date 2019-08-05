@@ -8,12 +8,17 @@ import cart from './cart'
 import products from './products'
 import orders from './orders'
 
+import categories from './categories'
+import {checkoutReducer} from './checkout'
+
 const reducer = combineReducers({
   user,
   products,
   cart,
   oneProduct: oneProductReducer,
-  orders
+  orders,
+  categories,
+  shippingAddress: checkoutReducer
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -23,3 +28,4 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user'
 export * from './products'
+export * from './categories'

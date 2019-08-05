@@ -14,7 +14,7 @@ const {
 const faker = require('faker')
 
 const createProduct = async () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10000; i++) {
     const product = {
       title: faker.commerce.productName(),
       picture: faker.image.image(),
@@ -27,11 +27,15 @@ const createProduct = async () => {
 }
 
 const createCategory = async () => {
-  for (let i = 0; i < 30; i++) {
+  let categories = []
+  for (let i = 0; i < 5; i++) {
     const category = {
       name: faker.commerce.department()
     }
-    await Category.create(category)
+    if (!categories.includes(category)) {
+      categories.push(category)
+      await Category.create(category)
+    }
   }
 }
 
@@ -58,7 +62,8 @@ const createUser = async () => {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      isAdmin: faker.random.boolean()
+      isAdmin: faker.random.boolean(),
+      shippingAddressId: Math.floor(Math.random() * 30 + 1)
     }
     await User.create(user)
   }
@@ -71,8 +76,8 @@ const createShippingAddress = async () => {
       city: faker.address.city(),
       zipCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      country: faker.address.country(),
-      userId: Math.floor(Math.random() * 30 + 1)
+      country: faker.address.country()
+      //userId: Math.floor(Math.random() * 30 + 1)
     }
     await ShippingAddress.create(shippingAddress)
   }
@@ -126,10 +131,10 @@ async function seed() {
 
   await createProduct()
   await createCategory()
+  await createShippingAddress()
   await createUser()
   await createReview()
   await setCategoryOnProduct()
-  await createShippingAddress()
   await createOrder()
   await createOrderProduct()
 

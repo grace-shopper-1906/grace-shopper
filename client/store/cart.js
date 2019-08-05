@@ -7,6 +7,7 @@ import history from '../history'
 const SET_CART = 'GET_CART'
 const UPDATE_CART = 'UPDATE_CART'
 const PLACE_ORDER = 'PLACE_ORDER'
+const MERGE_CART = 'MERGE_CART'
 
 /**
  * INITIAL STATE
@@ -19,10 +20,16 @@ const defaultCart = {}
 const setCart = cart => ({type: SET_CART, cart})
 const updateCart = cart => ({type: UPDATE_CART, cart})
 const placeOrder = () => ({type: PLACE_ORDER})
+const mergeCart = cart => ({type: MERGE_CART, cart})
 
 /**
  * THUNK CREATORS
  */
+export const mergeCartThunk = () => async dispatch => {
+  const response = await axios.put(`/api/cart/merge`)
+  if (response.data !== '') dispatch(mergeCart(response.data))
+}
+
 export const getCart = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/cart')
@@ -68,6 +75,9 @@ export default function(state = defaultCart, action) {
     }
     case PLACE_ORDER: {
       return {}
+    }
+    case MERGE_CART: {
+      return action.cart
     }
     default:
       return state
