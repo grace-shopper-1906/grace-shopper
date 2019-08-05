@@ -1,17 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {getOneProduct} from '../store/oneProduct'
-import {updateCartThunk} from '../store/cart'
-import {NavLink} from 'react-router-dom'
-import {PlaceOrderButton} from '../components'
-import {
-  Item,
-  Button,
-  Dropdown,
-  Container,
-  Header,
-  Message
-} from 'semantic-ui-react'
+import {getCart} from '../store/cart'
+import {PlaceOrderButton, CartItem} from '../components'
+import {Item, Container, Message, Button} from 'semantic-ui-react'
+
+const _ = require('lodash/lang')
 
 class CartList extends React.Component {
   constructor() {
@@ -19,11 +12,12 @@ class CartList extends React.Component {
     this.state = {
       canCheckout: true
     }
-    this.updateQuantity = this.updateQuantity.bind(this)
-    this.deleteProduct = this.deleteProduct.bind(this)
-    this.createDropdown = this.createDropdown.bind(this)
     this.notEnoughStock = this.notEnoughStock.bind(this)
     this.calculateSubtotal = this.calculateSubtotal.bind(this)
+  }
+
+  componentDidMount() {
+    if (_.isEmpty(this.props.cart)) this.props.getCart()
   }
 
   componentDidUpdate() {
@@ -33,40 +27,6 @@ class CartList extends React.Component {
         canCheckout: checkout
       })
     }
-  }
-
-  updateQuantity(num, item) {
-    const orderProduct = {
-      quantity: num,
-      productId: item.id,
-      orderId: this.props.cart.id,
-      event: 'updateQuantity'
-    }
-    this.props.update(orderProduct)
-  }
-
-  deleteProduct(item) {
-    const orderProduct = {
-      productId: item.id,
-      orderId: this.props.cart.id,
-      event: 'deleteItem'
-    }
-    this.props.update(orderProduct)
-  }
-
-  createDropdown(item) {
-    let options = []
-    for (let i = 1; i < 11; i++) {
-      options.push(
-        <Dropdown.Item
-          text={`${i}`}
-          value={i}
-          onClick={() => this.updateQuantity(i, item)}
-          key={i}
-        />
-      )
-    }
-    return options
   }
 
   notEnoughStock() {
@@ -91,10 +51,11 @@ class CartList extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     const products = this.props.cart.products
     return (
       <Container>
-        <h1>Your Cart</h1>
+        <h1>Your Cart {products && products.length === 0 ? 'Is Empty' : ''}</h1>
         {!this.state.canCheckout && (
           <Message negative>
             <Message.Header>
@@ -107,46 +68,18 @@ class CartList extends React.Component {
           {products &&
             products.map(item => {
               return (
-                <Item key={item.id}>
-                  <Item.Image size="small" src={item.picture} />
-                  <Item.Content>
-                    <Item.Header as={NavLink} to={`/products/${item.id}`}>
-                      {item.title}
-                    </Item.Header>
-                    <Item.Meta>
-                      Stock: {item.inventoryQuantity}{' '}
-                      {item.inventoryQuantity < item.order_product.quantity ? (
-                        <Message size="mini" negative compact>
-                          Not enough in stock
-                        </Message>
-                      ) : (
-                        ''
-                      )}
-                    </Item.Meta>
-                    <Item.Description>
-                      <Header sub>Price: {`$${item.price / 100.0}`}</Header>
-                      <Dropdown
-                        text={`Quantity: ${item.order_product.quantity.toString()}`}
-                      >
-                        <Dropdown.Menu>
-                          {this.createDropdown(item)}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                      <Button
-                        color="red"
-                        onClick={() => this.deleteProduct(item)}
-                      >
-                        Delete Item
-                      </Button>
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+                <CartItem item={item} cart={this.props.cart} key={item.id} />
               )
             })}
         </Item.Group>
         <h1>Subtotal: ${products && this.calculateSubtotal() / 100}</h1>
         <PlaceOrderButton disabled={!this.state.canCheckout} />
-        {/* <Button color="green" disabled={!this.state.canCheckout}>
+        {/* <Button
+          color="green"
+          disabled={
+            !this.state.canCheckout || (products && products.length === 0)
+          }
+        >
           Checkout
         </Button> */}
       </Container>
@@ -159,8 +92,7 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
-  getProduct: id => dispatch(getOneProduct(id)),
-  update: cart => dispatch(updateCartThunk(cart))
+  getCart: () => dispatch(getCart())
 })
 
 export default connect(mapState, mapDispatch)(CartList)
