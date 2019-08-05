@@ -14,7 +14,7 @@ const {
 const faker = require('faker')
 
 const createProduct = async () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10000; i++) {
     const product = {
       title: faker.commerce.productName(),
       picture: faker.image.image(),
