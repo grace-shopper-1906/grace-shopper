@@ -9,20 +9,12 @@ import {
   Loader
 } from 'semantic-ui-react'
 import ProductsCard from './ProductCard'
-import {
-  getAllProductsThunk,
-  fetchCategoriesThunk,
-  fetchProductsThunk
-} from '../store'
+import {getAllProductsThunk, fetchProductsThunk} from '../store'
 import {NavLink as Link} from 'react-router-dom'
 
 class DisconnectedHomepage extends React.Component {
   componentDidMount() {
-    this.props.getCategories()
     this.props.getProducts()
-  }
-  handleClick(filter) {
-    this.props.getProducts(1, filter, null, null)
   }
   render() {
     const {products, recommendedProducts, categories} = this.props
@@ -50,7 +42,6 @@ class DisconnectedHomepage extends React.Component {
                 raised
                 key={category.id}
                 style={{margin: '1rem'}}
-                // onClick={() => this.handleClick(category.name)}
               >
                 <Card.Content>
                   <Card.Header
@@ -64,7 +55,7 @@ class DisconnectedHomepage extends React.Component {
             ))}
           </Card.Group>
           <Segment inverted>
-            <Header as="h4">Recommended Products</Header>
+            <Header as="h4">Top Rated Products</Header>
           </Segment>
           <Card.Group centered stackable>
             {recommendedProducts.map(product => (
@@ -87,7 +78,7 @@ const mapState = state => {
         total += review.star
       })
       const avg = Math.floor(total / product.reviews.length)
-      if (avg === 5 && recommendedProducts.length < 6) {
+      if (avg >= 4 && recommendedProducts.length < 6) {
         recommendedProducts.push(product)
       }
     })
@@ -102,7 +93,6 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getCategories: () => dispatch(fetchCategoriesThunk()),
     getProducts: () => dispatch(getAllProductsThunk()),
     applyFilter: (page, category, sortBy, searchBy) =>
       dispatch(fetchProductsThunk(page, category, sortBy, searchBy))

@@ -27,11 +27,15 @@ const findOrCreateCart = async req => {
 router.get('/', async (req, res, next) => {
   try {
     if (req.user) {
-      const order = await Order.findOne({
-        where: {userId: req.user.id, status: 'inCart'},
-        include: [{model: Product}]
-      })
-      res.send(order)
+      try {
+        const order = await Order.findOne({
+          where: {userId: req.user.id, status: 'inCart'},
+          include: [{model: Product}]
+        })
+        res.send(order)
+      } catch (err) {
+        next(err)
+      }
     } else {
       const order = await Order.findOne({
         where: {sessionId: req.sessionID, status: 'inCart'},

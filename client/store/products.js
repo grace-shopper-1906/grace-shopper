@@ -17,6 +17,9 @@ export const getAllProductsThunk = () => {
 
 export const fetchProductsThunk = (page, category, sortBy, searchBy) => {
   return async dispatch => {
+    if (!page) {
+      page = 1
+    }
     let queryString = `?page=${page}`
 
     if (category) {
@@ -32,7 +35,7 @@ export const fetchProductsThunk = (page, category, sortBy, searchBy) => {
     const products = response.data.results
     const pages = response.data.pages
     dispatch(setProducts(products, pages))
-    // history.push(queryString)
+    history.push(queryString)
   }
 }
 

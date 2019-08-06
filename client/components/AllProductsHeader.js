@@ -18,9 +18,9 @@ class DisconnectedAllProductsHeader extends React.Component {
     super(props)
     this.state = {
       page: 1,
-      filter: null,
+      category: null,
       sortBy: null,
-      searchBy: null
+      searchBy: ''
     }
     this.updateFilter = this.updateFilter.bind(this)
     this.setCategoriesDropdown = this.setCategoriesDropdown.bind(this)
@@ -30,14 +30,18 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  componentDidMount() {
-    this.props.getCategories()
-    this.props.getProducts(this.state.page, this.state.filter)
-    // const unparsed = this.props.location.search
-    // const query = queryString.parse(unparsed)
-    // await this.setState(query)
-    // console.log('query', query)
-    // console.log('satte', this.state)
+  async componentDidMount() {
+    const unparsed = this.props.location.search
+    const query = queryString.parse(unparsed)
+    if (!query.page) query.page = 1
+    query.page = parseInt(query.page, 10)
+    await this.setState(query)
+    this.props.getProducts(
+      this.state.page,
+      this.state.category,
+      this.state.sortBy,
+      this.state.searchBy
+    )
   }
 
   setCategoriesDropdown() {
@@ -67,8 +71,8 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.callThunk()
   }
 
-  async updateFilter(filter) {
-    await this.setState({filter})
+  async updateFilter(category) {
+    await this.setState({category})
     this.callThunk()
   }
 
@@ -80,7 +84,7 @@ class DisconnectedAllProductsHeader extends React.Component {
   callThunk() {
     this.props.getProducts(
       this.state.page,
-      this.state.filter,
+      this.state.category,
       this.state.sortBy,
       this.state.searchBy
     )
@@ -93,7 +97,11 @@ class DisconnectedAllProductsHeader extends React.Component {
       <Container>
         <Header as="h2">All Products</Header>
         <Container textAlign="center" style={{marginBottom: '2rem'}} />
-        <Input placeholder="Search..." onChange={this.handleChange} />
+        <Input
+          placeholder="Search..."
+          onChange={this.handleChange}
+          value={this.state.searchBy}
+        />
         <Button onClick={this.callThunk}>
           <Icon name="search" />
         </Button>
@@ -106,6 +114,7 @@ class DisconnectedAllProductsHeader extends React.Component {
             {key: 1, text: 'Title', value: 'title'},
             {key: 2, text: 'Price', value: 'price'}
           ]}
+          value={this.state.sortBy}
           selection
           onChange={this.sort}
         />
@@ -114,6 +123,7 @@ class DisconnectedAllProductsHeader extends React.Component {
           placeholder="Filter"
           search
           clearable
+          value={this.state.category}
           options={this.setCategoriesDropdown()}
           selection
           onChange={event => {

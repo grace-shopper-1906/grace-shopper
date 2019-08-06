@@ -1,9 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Card, Container, Dimmer, Loader} from 'semantic-ui-react'
+import {Card, Container} from 'semantic-ui-react'
 import ProductsCard from './ProductCard'
 import AllProductsHeader from './AllProductsHeader'
-import {withRouter} from 'react-router-dom'
 
 class DisconnectedAllProducts extends React.Component {
   render() {
@@ -11,10 +10,9 @@ class DisconnectedAllProducts extends React.Component {
 
     if (!products || products.length === 0) {
       return (
-        <Container>
-          <Dimmer active inverted>
-            <Loader size="large">Loading</Loader>
-          </Dimmer>
+        <Container textAlign="center" style={{marginTop: '5rem'}}>
+          <AllProductsHeader />
+          <p>No Products Found</p>
         </Container>
       )
     }
@@ -37,4 +35,4 @@ const mapState = state => {
   }
 }
 
-export default withRouter(connect(mapState)(DisconnectedAllProducts))
+export default connect(mapState)(DisconnectedAllProducts)
