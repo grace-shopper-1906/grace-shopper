@@ -17,7 +17,8 @@ class OrdersList extends Component {
       <Container>
         <h1>Your Orders:</h1>
         <h2>You have {orders.length} orders</h2>
-        {orders.map(order => <OrderItem key={order.id} order={order} />)}
+        {orders &&
+          orders.map(order => <OrderItem key={order.id} order={order} />)}
       </Container>
     )
   }

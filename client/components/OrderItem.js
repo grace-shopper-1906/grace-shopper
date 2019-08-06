@@ -8,6 +8,7 @@ var moment = require('moment')
 
 export const OrderItem = props => {
   const order = props.order
+  console.log('in order item', order)
   return (
     <Segment.Group>
       <Segment>
@@ -38,9 +39,10 @@ export const OrderItem = props => {
       </Segment>
       <Segment>
         <Item.Group>
-          {order.products.map(item => {
-            return <OrderProduct product={item} key={item.id} />
-          })}
+          {order.products &&
+            order.products.map(item => {
+              return <OrderProduct product={item} key={item.id} />
+            })}
         </Item.Group>
       </Segment>
     </Segment.Group>

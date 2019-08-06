@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Container} from 'semantic-ui-react'
+import {Homepage} from '.'
 
 /**
  * COMPONENT
@@ -14,6 +15,7 @@ export const UserHome = props => {
       <h3>
         Welcome, {firstName} {email}
       </h3>
+      <Homepage />
     </Container>
   )
 }

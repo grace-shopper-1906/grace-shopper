@@ -11,16 +11,16 @@ import {
 } from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
 import {fetchProductsThunk, fetchCategoriesThunk} from '../store'
-import _ from 'lodash'
+import queryString from 'query-string'
 
 class DisconnectedAllProductsHeader extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      activePage: 1,
-      filter: null,
+      page: 1,
+      category: null,
       sortBy: null,
-      searchBy: null
+      searchBy: ''
     }
     this.updateFilter = this.updateFilter.bind(this)
     this.setCategoriesDropdown = this.setCategoriesDropdown.bind(this)
@@ -30,14 +30,18 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  componentDidMount() {
-    this.props.getCategories()
-    this.props.getProducts(this.state.activePage, this.state.filter)
-
-    // const unparsed = this.props.location.search
-    // const query = queryString(unparsed)
-    // // query === { page: 1, category: 'jewels' }
-    // this.props.fetchProducts(query)
+  async componentDidMount() {
+    const unparsed = this.props.location.search
+    const query = queryString.parse(unparsed)
+    if (!query.page) query.page = 1
+    query.page = parseInt(query.page, 10)
+    await this.setState(query)
+    this.props.getProducts(
+      this.state.page,
+      this.state.category,
+      this.state.sortBy,
+      this.state.searchBy
+    )
   }
 
   setCategoriesDropdown() {
@@ -67,35 +71,37 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.callThunk()
   }
 
-  async updateFilter(filter) {
-    await this.setState({
-      filter
-    })
+  async updateFilter(category) {
+    await this.setState({category})
     this.callThunk()
   }
 
-  async handlePaginationChange(e, {activePage}) {
-    await this.setState({activePage})
+  async handlePaginationChange(e, {page}) {
+    await this.setState({page})
     this.callThunk()
   }
 
   callThunk() {
     this.props.getProducts(
-      this.state.activePage,
-      this.state.filter,
+      this.state.page,
+      this.state.category,
       this.state.sortBy,
       this.state.searchBy
     )
   }
 
   render() {
-    const {activePage} = this.state
+    const {page} = this.state
 
     return (
       <Container>
         <Header as="h2">All Products</Header>
         <Container textAlign="center" style={{marginBottom: '2rem'}} />
-        <Input placeholder="Search..." onChange={this.handleChange} />
+        <Input
+          placeholder="Search..."
+          onChange={this.handleChange}
+          value={this.state.searchBy}
+        />
         <Button onClick={this.callThunk}>
           <Icon name="search" />
         </Button>
@@ -108,6 +114,7 @@ class DisconnectedAllProductsHeader extends React.Component {
             {key: 1, text: 'Title', value: 'title'},
             {key: 2, text: 'Price', value: 'price'}
           ]}
+          value={this.state.sortBy}
           selection
           onChange={this.sort}
         />
@@ -116,6 +123,7 @@ class DisconnectedAllProductsHeader extends React.Component {
           placeholder="Filter"
           search
           clearable
+          value={this.state.category}
           options={this.setCategoriesDropdown()}
           selection
           onChange={event => {
@@ -125,7 +133,7 @@ class DisconnectedAllProductsHeader extends React.Component {
         <Container textAlign="center" style={{marginBottom: '1rem'}}>
           <Container textAlign="center" style={{margin: '1rem'}}>
             <Pagination
-              activePage={activePage}
+              activePage={page}
               onPageChange={this.handlePaginationChange}
               totalPages={this.props.pages}
             />
@@ -137,14 +145,6 @@ class DisconnectedAllProductsHeader extends React.Component {
 }
 
 const mapState = state => {
-  // let sortedProducts
-
-  // if (!this.state.sortBy) {
-  //   sortedProducts = state.products
-  // } else {
-  //   sortedProducts = _.sortBy(state.products, [this.state.sortBy])
-  // }
-
   return {
     products: state.products,
     categories: state.categories,
