@@ -1,4 +1,5 @@
 import axios from 'axios'
+import history from '../history'
 
 /**
  * ACTION TYPES
@@ -28,6 +29,9 @@ export const getOrders = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/order')
     if (data !== '') dispatch(setOrders(data))
+    else {
+      history.push('/cart/view')
+    }
   } catch (err) {
     console.error(err)
   }
@@ -45,7 +49,10 @@ export const cancelOrderThunk = orderId => async dispatch => {
 export const getSingleOrderThunk = orderId => async dispatch => {
   try {
     const {data} = await axios.get(`/api/order/${orderId}`)
-    if (data !== null) dispatch(getSingleOrder(data))
+    if (data) dispatch(getSingleOrder(data))
+    else {
+      history.push('/cart/view')
+    }
   } catch (err) {
     console.error(err)
   }

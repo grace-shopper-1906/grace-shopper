@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
-import {withRouter, NavLink} from 'react-router-dom'
-import {Container, Form, Input, Button, Message} from 'semantic-ui-react'
+import {withRouter} from 'react-router-dom'
+import {Container, Form, Input} from 'semantic-ui-react'
 import {getCart, placeOrderThunk} from '../store/cart'
 import {OrderSummary, InvalidCartMessage} from '../components'
 import {
@@ -10,7 +10,6 @@ import {
   stripeCheckout
 } from '../store/checkout'
 import StripeCheckout from 'react-stripe-checkout'
-import history from '../history'
 require('../../secrets')
 const _ = require('lodash/lang')
 
