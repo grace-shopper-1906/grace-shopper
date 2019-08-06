@@ -45,7 +45,6 @@ export const cancelOrderThunk = orderId => async dispatch => {
 export const getSingleOrderThunk = orderId => async dispatch => {
   try {
     const {data} = await axios.get(`/api/order/${orderId}`)
-    console.log('order thunk', data)
     if (data !== null) dispatch(getSingleOrder(data))
   } catch (err) {
     console.error(err)
@@ -71,7 +70,6 @@ export default function(state = defaultOrders, action) {
       })
     }
     case GET_SINGLE_ORDER: {
-      console.log('get single order')
       return action.order
     }
     default:

@@ -10,7 +10,6 @@ export class OrderConfirmation extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <Container>
         <h1>Order Successful</h1>

@@ -8,7 +8,6 @@ var moment = require('moment')
 
 export const OrderItem = props => {
   const order = props.order
-  console.log('in order item', order)
   return (
     <Segment.Group>
       <Segment>

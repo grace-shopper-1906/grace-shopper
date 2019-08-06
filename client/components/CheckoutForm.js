@@ -101,7 +101,6 @@ export class CheckoutForm extends React.Component {
         postal_code: this.state.zipCode
       }
     }
-    console.log('handle token', product)
     const response = await this.props.stripeCheckout(token, product)
     if (response === 'success') {
       this.props.placeOrder(this.props.cart)
