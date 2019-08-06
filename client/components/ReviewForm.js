@@ -27,9 +27,11 @@ export class ReviewForm extends React.Component {
     this.handleRate = this.handleRate.bind(this)
   }
 
-  handleRate(event) {
-    console.log(event.target)
-    //this.setState({star: 3}) //fix this later
+  handleRate(event, data) {
+    console.log(data.rating)
+
+    //console.log(event.target.value)
+    this.setState({star: data.rating}) //fix this later
     //this.setState({star: 1, review: ''})
   }
 
