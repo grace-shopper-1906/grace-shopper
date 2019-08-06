@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
-import {Container, Form, Input} from 'semantic-ui-react'
+import {Container, Form, Input, Dimmer, Loader} from 'semantic-ui-react'
 import {getCart, placeOrderThunk} from '../store/cart'
 import {OrderSummary, InvalidCartMessage} from '../components'
 import {
@@ -27,8 +27,7 @@ export class CheckoutForm extends React.Component {
       country: this.props.shippingAddress.country,
       streetAddress: this.props.shippingAddress.streetAddress,
       canCheckout: true,
-      emptyCart: false,
-      subtotal: 0
+      emptyCart: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -51,15 +50,12 @@ export class CheckoutForm extends React.Component {
         emptyCart: true
       })
     }
-    this.setState({
-      subtotal: this.calculateSubtotal()
-    })
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.shippingAddress) {
       if (this.props.shippingAddress !== nextProps.shippingAddress) {
-        this.setState(nextProps.shippingAddress)
+        this.setState(nextProps.shippingAddress[0])
       }
     }
   }
@@ -72,8 +68,6 @@ export class CheckoutForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    this.props.cShippingA(this.state)
-    this.props.shippingA()
   }
 
   notEnoughStock() {
@@ -100,6 +94,16 @@ export class CheckoutForm extends React.Component {
         postal_code: this.state.zipCode
       }
     }
+    this.props.cShippingA({
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      email: this.state.email,
+      city: this.state.city,
+      zipCode: this.state.zipCode,
+      state: this.state.state,
+      country: this.state.country,
+      streetAddress: this.state.streetAddress
+    })
     const response = await this.props.stripeCheckout(token, product)
     if (response === 'success') {
       this.props.placeOrder(this.props.cart)
@@ -118,7 +122,11 @@ export class CheckoutForm extends React.Component {
   // eslint-disable-next-line complexity
   render() {
     if (!this.props.shippingAddress) {
-      return <div>Loading</div>
+      return (
+        <Dimmer active inverted>
+          <Loader size="large">Loading</Loader>
+        </Dimmer>
+      )
     } else if (!this.state.canCheckout) {
       return <InvalidCartMessage />
     } else if (this.state.emptyCart) {

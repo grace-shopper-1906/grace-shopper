@@ -20,10 +20,15 @@ router.get('/', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    //const sessionId=req.sessionID
     if (req.user && req.user.id) {
-      const id = req.user.shippingAddressId
-      const address = await ShippingAddress.findByPk(id)
+      const address = await ShippingAddress.findOrCreate({
+        where: {id: req.user.shippingAddressId}
+      })
+      const user = await User.findByPk(req.user.id)
+      await user.update({
+        shippingAddressId: address[0].dataValues.id
+      })
+      console.log(address, user)
       res.json(address)
     } else {
       res.json(null)
@@ -36,6 +41,7 @@ router.get('/', async (req, res, next) => {
 router.put('/', async (req, res, next) => {
   try {
     if (req.user && req.user.id) {
+      console.log(req.body)
       const uid = req.user.id
       const id = req.user.shippingAddressId
       const firstName = req.body.firstName
