@@ -11,7 +11,6 @@ import {
 } from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
 import {fetchProductsThunk, fetchCategoriesThunk} from '../store'
-import _ from 'lodash'
 
 class DisconnectedAllProductsHeader extends React.Component {
   constructor(props) {
@@ -137,14 +136,6 @@ class DisconnectedAllProductsHeader extends React.Component {
 }
 
 const mapState = state => {
-  // let sortedProducts
-
-  // if (!this.state.sortBy) {
-  //   sortedProducts = state.products
-  // } else {
-  //   sortedProducts = _.sortBy(state.products, [this.state.sortBy])
-  // }
-
   return {
     products: state.products,
     categories: state.categories,

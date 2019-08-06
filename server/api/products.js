@@ -14,6 +14,7 @@ router.get('/', async (req, res, next) => {
   const CATEGORY_FILTER = req.query.category
   const SEARCH_FILTER = req.query.searchBy
   const SORT_BY = req.query.sortBy || 'id'
+  const OFFSET_VALUE = (page - 1) * PAGE_SIZE || 1
 
   //create dynamic query
   const createQuery = () => {
@@ -60,9 +61,20 @@ router.get('/', async (req, res, next) => {
       where: query.searchQuery,
       order: [SORT_BY],
       limit: PAGE_SIZE,
-      offset: (page - 1) * PAGE_SIZE
+      offset: OFFSET_VALUE
     })
     res.json({results, pages})
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/all', async (req, res, next) => {
+  try {
+    const products = await Product.findAll({
+      include: [{model: Reviews}, {model: Category}]
+    })
+    res.json(products)
   } catch (error) {
     next(error)
   }

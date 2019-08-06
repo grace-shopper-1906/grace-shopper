@@ -20,7 +20,7 @@ class DisconnectedAllProducts extends React.Component {
     return (
       <Container textAlign="center" style={{marginTop: '5rem'}}>
         <AllProductsHeader />
-        <Card.Group stackable>
+        <Card.Group centered stackable>
           {products.map(product => (
             <ProductsCard product={product} key={product.id} />
           ))}
