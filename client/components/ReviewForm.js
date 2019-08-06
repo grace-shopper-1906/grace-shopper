@@ -45,9 +45,9 @@ export class ReviewForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    let productId = 3 //testing only obs
+    let productId = this.props.match.params.id
     this.props.review(productId, this.state)
-    //this.props.history.push('/review')
+    this.props.history.push(`/products/${productId}`)
   }
 
   render() {

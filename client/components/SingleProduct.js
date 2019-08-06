@@ -21,11 +21,17 @@ export class JustOneProduct extends React.Component {
       quantity: 1
     }
     this.backHomeButton = this.backHomeButton.bind(this)
+    this.reviewButton = this.reviewButton.bind(this)
   }
 
   componentDidMount() {
     this.props.fetchOneProduct(this.props.match.params.id)
     this.setState(this.props.match.params)
+  }
+
+  reviewButton(event) {
+    //console.log(event.target.value)
+    this.props.history.push(`/review/${event.target.value}`)
   }
 
   backHomeButton(event) {
@@ -126,8 +132,10 @@ export class JustOneProduct extends React.Component {
         <Button type="Submit" onClick={this.backHomeButton}>
           Back to Home
         </Button>
-        <br />
-        <br />
+
+        <Button type="Submit" onClick={this.reviewButton} value={p.id}>
+          Review
+        </Button>
       </Container>
     )
     return this.state.oneProduct ? 'Just a sec...' : main
