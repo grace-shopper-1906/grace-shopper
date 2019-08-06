@@ -2,16 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {updateReviewThunk} from '../store/review'
-import {
-  Container,
-  Form,
-  TextArea,
-  Rating,
-  Input,
-  Button
-} from 'semantic-ui-react'
-
-//const id = 3 ///really bad change this testing only
+import {Container, Form, TextArea, Rating, Button} from 'semantic-ui-react'
 
 export class ReviewForm extends React.Component {
   constructor(props) {
@@ -29,15 +20,8 @@ export class ReviewForm extends React.Component {
 
   handleRate(event, data) {
     console.log(data.rating)
-
-    //console.log(event.target.value)
-    this.setState({star: data.rating}) //fix this later
-    //this.setState({star: 1, review: ''})
+    this.setState({star: data.rating})
   }
-
-  //componentDidMount() {
-  //this.setState(this.props.match.params)
-  //}
 
   handleChange(event) {
     this.setState({

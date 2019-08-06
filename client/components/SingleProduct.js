@@ -30,7 +30,6 @@ export class JustOneProduct extends React.Component {
   }
 
   reviewButton(event) {
-    //console.log(event.target.value)
     this.props.history.push(`/review/${event.target.value}`)
   }
 
