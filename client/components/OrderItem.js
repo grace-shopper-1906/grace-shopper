@@ -18,21 +18,26 @@ export const OrderItem = props => {
             </h3>
           </Grid.Column>
           <Grid.Column textAlign="center">
-            <h3>Status: {order.status}</h3>
+            <h3>
+              Status:{' '}
+              {order.status &&
+                order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+            </h3>
           </Grid.Column>
           <Grid.Column textAlign="center">
             <h3>Total Price: ${order.totalPrice / 100}</h3>
           </Grid.Column>
           <Grid.Column textAlign="right">
-            {order.status !== ('cancelled' || 'inCart') && (
-              <Button
-                color="red"
-                size="tiny"
-                onClick={() => props.cancelOrder(order.id)}
-              >
-                Cancel Order
-              </Button>
-            )}
+            {order.status !== 'cancelled' &&
+              props.orderConfirmation !== true && (
+                <Button
+                  color="red"
+                  size="tiny"
+                  onClick={() => props.cancelOrder(order.id)}
+                >
+                  Cancel Order
+                </Button>
+              )}
           </Grid.Column>
         </Grid>
       </Segment>

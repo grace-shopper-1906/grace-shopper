@@ -14,7 +14,7 @@ export class OrderConfirmation extends Component {
       <Container>
         <h1>Order Successful</h1>
         <h2>Order Summary:</h2>
-        <OrderItem order={this.props.orders} />
+        <OrderItem order={this.props.orders} orderConfirmation={true} />
       </Container>
     )
   }

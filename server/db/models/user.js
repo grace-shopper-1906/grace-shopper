@@ -37,9 +37,6 @@ const User = db.define('user', {
   },
   lastName: {
     type: Sequelize.STRING
-  },
-  shippingAddress: {
-    type: Sequelize.STRING
   }
 })
 
