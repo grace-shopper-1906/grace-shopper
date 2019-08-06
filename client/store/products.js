@@ -7,8 +7,19 @@ export const setProducts = (products, pages) => {
   return {type: SET_PRODUCTS, products, pages}
 }
 
+export const getAllProductsThunk = () => {
+  return async dispatch => {
+    const response = await axios.get(`/api/products/all`)
+    const products = response.data
+    dispatch(setProducts(products, 1))
+  }
+}
+
 export const fetchProductsThunk = (page, category, sortBy, searchBy) => {
   return async dispatch => {
+    if (!page) {
+      page = 1
+    }
     let queryString = `?page=${page}`
 
     if (category) {
@@ -21,7 +32,6 @@ export const fetchProductsThunk = (page, category, sortBy, searchBy) => {
       queryString += `&searchBy=${searchBy}`
     }
     const response = await axios.get(`/api/products${queryString}`)
-
     const products = response.data.results
     const pages = response.data.pages
     dispatch(setProducts(products, pages))

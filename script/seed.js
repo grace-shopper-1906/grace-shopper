@@ -26,16 +26,19 @@ const createProduct = async () => {
   }
 }
 
-const createCategory = async () => {
+const createCategory = () => {
   let categories = []
-  for (let i = 0; i < 5; i++) {
+
+  for (let i = 0; i < 30; i++) {
     const category = {
       name: faker.commerce.department()
     }
-    if (!categories.includes(category)) {
-      categories.push(category)
-      await Category.create(category)
-    }
+    categories.map(async item => {
+      if (item.name !== category.name) {
+        categories.push(category)
+        await Category.create(category)
+      }
+    })
   }
 }
 
@@ -113,9 +116,9 @@ const createOrder = async () => {
 }
 
 const createOrderProduct = async () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 1; i < 100; i++) {
     const orderProductRelationship = {
-      orderId: Math.floor(Math.random() * 100 + 1),
+      orderId: i,
       productId: Math.floor(Math.random() * 100 + 1),
       quantity: Math.floor(Math.random() * 10 + 1),
       productPrice: Math.floor(Math.random() * 100000 + 1)
