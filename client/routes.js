@@ -7,6 +7,7 @@ import SingleProduct from './components/SingleProduct'
 import {me, fetchProductsThunk, fetchCategoriesThunk} from './store'
 import AllProducts from './components/AllProducts'
 import CheckoutForm from './components/CheckoutForm'
+import ReviewForm from './components/ReviewForm'
 
 /**
  * COMPONENT
@@ -33,6 +34,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route exact path="/checkout" component={CheckoutForm} />
             <Route path="/orders" component={OrdersList} />
+            <Route path="/review/:id" component={ReviewForm} />
             {/* <Route path="/checkout/confirmation/:cartId" component={OrderConfirmation}/>  */}
           </Switch>
         )}
