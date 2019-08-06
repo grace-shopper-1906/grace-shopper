@@ -44,7 +44,7 @@ export default class DesktopNav extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item as={NavLink} exact to="/">
+                <Menu.Item as={NavLink} exact to="/home">
                   Home
                 </Menu.Item>
                 <Menu.Item as={NavLink} exact to="/products">

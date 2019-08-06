@@ -14,7 +14,7 @@ const {
 const faker = require('faker')
 
 const createProduct = async () => {
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 1000; i++) {
     const product = {
       title: faker.commerce.productName(),
       picture: faker.image.image(),
@@ -26,16 +26,19 @@ const createProduct = async () => {
   }
 }
 
-const createCategory = async () => {
+const createCategory = () => {
   let categories = []
-  for (let i = 0; i < 5; i++) {
+
+  for (let i = 0; i < 30; i++) {
     const category = {
       name: faker.commerce.department()
     }
-    if (!categories.includes(category)) {
-      categories.push(category)
-      await Category.create(category)
-    }
+    categories.map(async item => {
+      if (item.name !== category.name) {
+        categories.push(category)
+        await Category.create(category)
+      }
+    })
   }
 }
 
@@ -77,7 +80,6 @@ const createShippingAddress = async () => {
       zipCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
       country: faker.address.country()
-      //userId: Math.floor(Math.random() * 30 + 1)
     }
     await ShippingAddress.create(shippingAddress)
   }
@@ -114,9 +116,9 @@ const createOrder = async () => {
 }
 
 const createOrderProduct = async () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 1; i < 100; i++) {
     const orderProductRelationship = {
-      orderId: Math.floor(Math.random() * 100 + 1),
+      orderId: i,
       productId: Math.floor(Math.random() * 100 + 1),
       quantity: Math.floor(Math.random() * 10 + 1),
       productPrice: Math.floor(Math.random() * 100000 + 1)

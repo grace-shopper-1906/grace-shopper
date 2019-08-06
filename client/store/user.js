@@ -26,6 +26,7 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
     dispatch(getUser(res.data || defaultUser))
+    dispatch(mergeCartThunk())
   } catch (err) {
     console.error(err)
   }

@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, CartList, OrdersList} from './components'
+import {Login, Signup, CartList, OrdersList, Homepage} from './components'
 import SingleProduct from './components/SingleProduct'
-import {me} from './store'
+import {me, fetchProductsThunk, fetchCategoriesThunk} from './store'
 import AllProducts from './components/AllProducts'
 import CheckoutForm from './components/CheckoutForm'
 import ReviewForm from './components/ReviewForm'
@@ -25,21 +25,21 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/products/:id" component={SingleProduct} />
+        <Route exact path="/products/:id" component={SingleProduct} />
         <Route exact path="/cart/view" component={CartList} />
         <Route exact path="/products" component={AllProducts} />
+        <Route exact path="/home" component={Homepage} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
             <Route exact path="/checkout" component={CheckoutForm} />
             <Route path="/orders" component={OrdersList} />
             <Route path="/review/:id" component={ReviewForm} />
             {/* <Route path="/checkout/confirmation/:cartId" component={OrderConfirmation}/>  */}
           </Switch>
         )}
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
+        {/* Displays our homepage component as a fallback */}
+        <Route component={Homepage} />
       </Switch>
     )
   }
@@ -57,6 +57,8 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
+      dispatch(fetchProductsThunk())
+      dispatch(fetchCategoriesThunk())
     }
   }
 }
