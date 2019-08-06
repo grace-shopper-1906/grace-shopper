@@ -9,52 +9,63 @@ import {
   Loader
 } from 'semantic-ui-react'
 import ProductsCard from './ProductCard'
-import {getAllProductsThunk, fetchCategoriesThunk} from '../store'
-import {Link} from 'react-router-dom'
+import {
+  getAllProductsThunk,
+  fetchCategoriesThunk,
+  fetchProductsThunk
+} from '../store'
+import {NavLink as Link} from 'react-router-dom'
 
 class DisconnectedHomepage extends React.Component {
   componentDidMount() {
     this.props.getCategories()
     this.props.getProducts()
   }
+  handleClick(filter) {
+    this.props.getProducts(1, filter, null, null)
+  }
   render() {
     const {products, recommendedProducts, categories} = this.props
 
     if (!products || products.length === 0) {
       return (
-        <div>
-          <Segment>
-            <Dimmer active>
-              <Loader content="Loading" />
-            </Dimmer>
-          </Segment>
-        </div>
+        <Container>
+          <Dimmer active inverted>
+            <Loader size="large">Loading</Loader>
+          </Dimmer>
+        </Container>
       )
     }
     return (
-      <Container textAlign="center" style={{marginTop: '5rem'}}>
+      <Container textAlign="center" style={{marginTop: '1rem'}}>
         <Header as="h1">Wacky Products</Header>
-        <Container textAlign="center">
-          <Segment inverted> Shop by Category</Segment>
-          <Card.Group stackable>
+        <Container textAlign="center" style={{marginTop: '5rem'}}>
+          <Segment inverted>
+            <Header as="h4">Shop by Category</Header>
+          </Segment>
+          <Card.Group centered stackable>
             {categories.map(category => (
               <Card
                 className="centered"
                 raised
                 key={category.id}
                 style={{margin: '1rem'}}
+                // onClick={() => this.handleClick(category.name)}
               >
-                <Link
-                  to={`/products?category=${category.name}`}
-                  key={category.id}
-                />
                 <Card.Content>
-                  <Card.Header>{category.name}</Card.Header>
+                  <Card.Header
+                    as={Link}
+                    to={`/products?category=${category.name}`}
+                  >
+                    {category.name}
+                  </Card.Header>
                 </Card.Content>
               </Card>
             ))}
           </Card.Group>
-          <Segment inverted> Recommended Products</Segment>
+          <Segment inverted>
+            <Header as="h4">Recommended Products</Header>
+          </Segment>
           <Card.Group centered stackable>
             {recommendedProducts.map(product => (
               <ProductsCard product={product} key={product.id} />
@@ -92,7 +103,9 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getCategories: () => dispatch(fetchCategoriesThunk()),
-    getProducts: () => dispatch(getAllProductsThunk())
+    getProducts: () => dispatch(getAllProductsThunk()),
+    applyFilter: (page, category, sortBy, searchBy) =>
+      dispatch(fetchProductsThunk(page, category, sortBy, searchBy))
   }
 }
 

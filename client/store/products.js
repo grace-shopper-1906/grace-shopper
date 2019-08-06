@@ -32,7 +32,7 @@ export const fetchProductsThunk = (page, category, sortBy, searchBy) => {
     const products = response.data.results
     const pages = response.data.pages
     dispatch(setProducts(products, pages))
-    history.push(queryString)
+    // history.push(queryString)
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Card, Container} from 'semantic-ui-react'
+import {Card, Container, Dimmer, Loader} from 'semantic-ui-react'
 import ProductsCard from './ProductCard'
 import AllProductsHeader from './AllProductsHeader'
 import {withRouter} from 'react-router-dom'
@@ -11,9 +11,10 @@ class DisconnectedAllProducts extends React.Component {
 
     if (!products || products.length === 0) {
       return (
-        <Container textAlign="center" style={{marginTop: '5rem'}}>
-          <AllProductsHeader />
-          <p>No Products Found</p>
+        <Container>
+          <Dimmer active inverted>
+            <Loader size="large">Loading</Loader>
+          </Dimmer>
         </Container>
       )
     }

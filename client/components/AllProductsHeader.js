@@ -11,12 +11,13 @@ import {
 } from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
 import {fetchProductsThunk, fetchCategoriesThunk} from '../store'
+import queryString from 'query-string'
 
 class DisconnectedAllProductsHeader extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      activePage: 1,
+      page: 1,
       filter: null,
       sortBy: null,
       searchBy: null
@@ -31,12 +32,12 @@ class DisconnectedAllProductsHeader extends React.Component {
 
   componentDidMount() {
     this.props.getCategories()
-    this.props.getProducts(this.state.activePage, this.state.filter)
-
+    this.props.getProducts(this.state.page, this.state.filter)
     // const unparsed = this.props.location.search
-    // const query = queryString(unparsed)
-    // // query === { page: 1, category: 'jewels' }
-    // this.props.fetchProducts(query)
+    // const query = queryString.parse(unparsed)
+    // await this.setState(query)
+    // console.log('query', query)
+    // console.log('satte', this.state)
   }
 
   setCategoriesDropdown() {
@@ -67,20 +68,18 @@ class DisconnectedAllProductsHeader extends React.Component {
   }
 
   async updateFilter(filter) {
-    await this.setState({
-      filter
-    })
+    await this.setState({filter})
     this.callThunk()
   }
 
-  async handlePaginationChange(e, {activePage}) {
-    await this.setState({activePage})
+  async handlePaginationChange(e, {page}) {
+    await this.setState({page})
     this.callThunk()
   }
 
   callThunk() {
     this.props.getProducts(
-      this.state.activePage,
+      this.state.page,
       this.state.filter,
       this.state.sortBy,
       this.state.searchBy
@@ -88,7 +87,7 @@ class DisconnectedAllProductsHeader extends React.Component {
   }
 
   render() {
-    const {activePage} = this.state
+    const {page} = this.state
 
     return (
       <Container>
@@ -124,7 +123,7 @@ class DisconnectedAllProductsHeader extends React.Component {
         <Container textAlign="center" style={{marginBottom: '1rem'}}>
           <Container textAlign="center" style={{margin: '1rem'}}>
             <Pagination
-              activePage={activePage}
+              activePage={page}
               onPageChange={this.handlePaginationChange}
               totalPages={this.props.pages}
             />
