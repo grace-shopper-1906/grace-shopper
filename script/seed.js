@@ -13,11 +13,26 @@ const {
 
 const faker = require('faker')
 
+const images = [
+  '/anchor-bracelet-mens.jpg',
+  '/black-fashion-backpack.jpg',
+  '/blue-t-shirt.jpg',
+  '/bright-red-purse-with-gold.jpg',
+  '/business-cat-in-office.jpg',
+  '/car.jpg',
+  '/galaxy-earrings.jpg',
+  '/grey-and-peach-scarf-product.jpg',
+  '/pool-floaty-fun.jpg',
+  '/simple-red-t-shirt.jpg',
+  '/spa-supplies.jpg',
+  '/wrist-watches.jpg'
+]
+
 const createProduct = async () => {
   for (let i = 0; i < 1000; i++) {
     const product = {
       title: faker.commerce.productName(),
-      picture: faker.image.image(),
+      picture: images[Math.floor(Math.random() * 11)],
       description: faker.lorem.paragraph(),
       price: Math.floor(Math.random() * 100000 + 1),
       inventoryQuantity: Math.floor(Math.random() * 100 + 1)
@@ -26,19 +41,17 @@ const createProduct = async () => {
   }
 }
 
-const createCategory = () => {
+const createCategory = async () => {
   let categories = []
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 40; i++) {
     const category = {
       name: faker.commerce.department()
     }
-    categories.map(async item => {
-      if (item.name !== category.name) {
-        categories.push(category)
-        await Category.create(category)
-      }
-    })
+    if (!categories.includes(category.name) && categories.length <= 18) {
+      await Category.create(category)
+      categories.push(category.name)
+    }
   }
 }
 

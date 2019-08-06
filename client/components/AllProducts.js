@@ -10,14 +10,14 @@ class DisconnectedAllProducts extends React.Component {
 
     if (!products || products.length === 0) {
       return (
-        <Container textAlign="center" style={{marginTop: '5rem'}}>
+        <Container textAlign="center" style={{marginTop: '1rem'}}>
           <AllProductsHeader />
           <p>No Products Found</p>
         </Container>
       )
     }
     return (
-      <Container textAlign="center" style={{marginTop: '5rem'}}>
+      <Container textAlign="center" style={{marginTop: '1rem'}}>
         <AllProductsHeader />
         <Card.Group centered stackable>
           {products.map(product => (
