@@ -26,17 +26,19 @@ const createProduct = async () => {
   }
 }
 
-const createCategory = async () => {
+const createCategory = () => {
   let categories = []
 
   for (let i = 0; i < 30; i++) {
     const category = {
       name: faker.commerce.department()
     }
-    if (!categories.includes(category.name)) {
-      await Category.create(category)
-      categories.push(category.name)
-    }
+    categories.map(async item => {
+      if (item.name !== category.name) {
+        categories.push(category)
+        await Category.create(category)
+      }
+    })
   }
 }
 
