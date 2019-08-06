@@ -24,6 +24,17 @@ export const updateShippingAddress = address => async dispatch => {
   dispatch(changeShippingAddress(data))
 }
 
+export const stripeCheckout = (token, product) => async () => {
+  try {
+    const response = await axios.post('/api/checkout/stripe', {token, product})
+    const {status} = response.data
+    console.log(status)
+    return status
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export function checkoutReducer(address = '', action) {
   switch (action.type) {
     case GET_SHIPPING_ADDRESS:

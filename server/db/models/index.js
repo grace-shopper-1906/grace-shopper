@@ -4,7 +4,6 @@ const Product = require('./product')
 const Category = require('./category')
 const Order = require('./order')
 const ShippingAddress = require('./shippingAddress')
-// const Sessions = require('./sessions')
 const orderProduct = require('./orderProduct')
 
 Product.hasMany(Review)

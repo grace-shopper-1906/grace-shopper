@@ -24,7 +24,7 @@ export const OrderItem = props => {
             <h3>Total Price: ${order.totalPrice / 100}</h3>
           </Grid.Column>
           <Grid.Column textAlign="right">
-            {order.status !== 'cancelled' && (
+            {order.status !== ('cancelled' || 'inCart') && (
               <Button
                 color="red"
                 size="tiny"

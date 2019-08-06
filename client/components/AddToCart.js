@@ -13,7 +13,7 @@ class DisconnectedAddToCart extends React.Component {
           this.props.addToCart(this.props.orderProducts)
         }}
       >
-        <Icon loading name="cart arrow down" />
+        <Icon name="cart arrow down" />
         {this.props.buyItAgain ? 'Buy it Again' : 'Add to Cart'}
       </Button>
     )

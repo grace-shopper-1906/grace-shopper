@@ -1,4 +1,7 @@
 const router = require('express').Router()
+require('../../secrets')
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
+const uuid = require('uuid/v4')
 
 const {User, ShippingAddress} = require('../db/models')
 
@@ -53,6 +56,43 @@ router.put('/', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+})
+
+router.post('/stripe', async (req, res) => {
+  let error
+  let status
+  try {
+    const {product, token} = req.body
+
+    const customer = await stripe.customers.create({
+      email: token.email,
+      source: token.id
+    })
+
+    const idempotency_key = uuid()
+    const charge = await stripe.charges.create(
+      {
+        amount: product.amount * 100,
+        currency: 'usd',
+        customer: customer.id,
+        receipt_email: token.email,
+        description: `Purchased the ${product.name}`,
+        shipping: {
+          name: token.card.name,
+          address: product.address
+        }
+      },
+      {
+        idempotency_key
+      }
+    )
+    status = 'success'
+  } catch (error) {
+    console.error('Error:', error)
+    status = 'failure'
+  }
+
+  res.json({error, status})
 })
 
 module.exports = router

@@ -1,8 +1,19 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
-import {Container, Form, Input, Button} from 'semantic-ui-react'
-import {fetchShippingAddress, updateShippingAddress} from '../store/checkout'
+import {withRouter, NavLink} from 'react-router-dom'
+import {Container, Form, Input, Button, Message} from 'semantic-ui-react'
+import {getCart} from '../store/cart'
+import {OrderSummary} from '../components'
+import {PlaceOrderButton} from '../components'
+import {
+  fetchShippingAddress,
+  updateShippingAddress,
+  stripeCheckout
+} from '../store/checkout'
+import StripeCheckout from 'react-stripe-checkout'
+import history from '../history'
+require('../../secrets')
+const _ = require('lodash/lang')
 
 export class CheckoutForm extends React.Component {
   constructor(props) {
@@ -16,23 +27,32 @@ export class CheckoutForm extends React.Component {
       zipCode: this.props.shippingAddress.zipCode,
       state: this.props.shippingAddress.state,
       country: this.props.shippingAddress.country,
-      streetAddress: this.props.shippingAddress.streetAddress
+      streetAddress: this.props.shippingAddress.streetAddress,
+      canCheckout: true
     }
 
     this.backHomeButton = this.backHomeButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleToken = this.handleToken.bind(this)
+    this.notEnoughStock = this.notEnoughStock.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.shippingA()
     this.setState(this.props.match.params)
+    if (_.isEmpty(this.props.cart)) await this.props.getCart()
+    if (!this.notEnoughStock()) {
+      console.log('bad stock')
+      this.setState({
+        canCheckout: false
+      })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.shippingAddress) {
       if (this.props.shippingAddress !== nextProps.shippingAddress) {
-        console.log('setting shipping state', nextProps.shippingAddress)
         this.setState(nextProps.shippingAddress)
       }
     }
@@ -55,15 +75,60 @@ export class CheckoutForm extends React.Component {
     this.props.shippingA()
   }
 
+  notEnoughStock() {
+    const products = this.props.cart.products
+    let result = true
+    if (products) {
+      products.forEach(item => {
+        if (item.inventoryQuantity < item.order_product.quantity) {
+          result = false
+        }
+      })
+    }
+    return result
+  }
+
+  async handleToken(token) {
+    const product = {
+      amount: 1,
+      name: 'name',
+      address: {
+        line1: this.state.streetAddress,
+        city: this.state.city,
+        country: this.state.country,
+        postal_code: this.state.zipCode
+      }
+    }
+    const response = await this.props.stripeCheckout(token, product)
+    console.log('response', response)
+    if (response === 'success') {
+      console.log('pushing to history')
+      this.props.history.push(`/checkout/confirmation/${this.props.cart.id}`)
+    }
+  }
+
   // eslint-disable-next-line complexity
   render() {
-    //let u = this.props.user
-    //let sa = this.props.shippingAddress
     if (!this.props.shippingAddress) {
       return <div>Loading</div>
+    } else if (!this.state.canCheckout) {
+      return (
+        <Container>
+          <Message negative>
+            <Message.Header>
+              One of your products doesn't have enough stock!
+            </Message.Header>
+            <p>
+              Please fix your <NavLink to="/cart/view">cart</NavLink> to
+              checkout
+            </p>
+          </Message>
+        </Container>
+      )
     }
     const hasUser = (
       <Container>
+        <OrderSummary order={this.props.cart} />
         <h1>Ship To:</h1>
         <Form onSubmit={this.handleSubmit}>
           <Form.Group widths="equal">
@@ -160,6 +225,11 @@ export class CheckoutForm extends React.Component {
             label=""
           />
         </Form>
+        <StripeCheckout
+          stripeKey={process.env.STRIPE_PUBLIC_KEY}
+          token={this.handleToken}
+          price={1}
+        />
       </Container>
     )
     //return hasUser
@@ -169,13 +239,17 @@ export class CheckoutForm extends React.Component {
 
 const mapStateToProps = state => ({
   shippingAddress: state.shippingAddress,
-  user: state.user
+  user: state.user,
+  cart: state.cart
 })
 
 const mapDispatchToProps = dispatch => {
   return {
     shippingA: () => dispatch(fetchShippingAddress()),
-    cShippingA: address => dispatch(updateShippingAddress(address))
+    cShippingA: address => dispatch(updateShippingAddress(address)),
+    stripeCheckout: (token, product) =>
+      dispatch(stripeCheckout(token, product)),
+    getCart: () => dispatch(getCart())
   }
 }
 
