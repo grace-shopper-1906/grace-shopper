@@ -7,8 +7,6 @@ import {Item, Segment, Grid, Button} from 'semantic-ui-react'
 export const OrderSummary = props => {
   const order = props.order
 
-  console.log(order)
-
   const calculateSubtotal = () => {
     let sum = 0
     order.products.forEach(item => {

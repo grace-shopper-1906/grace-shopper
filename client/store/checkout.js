@@ -26,6 +26,7 @@ export const updateShippingAddress = address => async dispatch => {
 
 export const stripeCheckout = (token, product) => async () => {
   try {
+    console.log('checkout thunk', product)
     const response = await axios.post('/api/checkout/stripe', {token, product})
     const {status} = response.data
     console.log(status)

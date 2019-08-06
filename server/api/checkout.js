@@ -63,6 +63,7 @@ router.post('/stripe', async (req, res) => {
   let status
   try {
     const {product, token} = req.body
+    console.log(product)
 
     const customer = await stripe.customers.create({
       email: token.email,
@@ -72,11 +73,11 @@ router.post('/stripe', async (req, res) => {
     const idempotency_key = uuid()
     const charge = await stripe.charges.create(
       {
-        amount: product.amount * 100,
+        amount: product.amount,
         currency: 'usd',
         customer: customer.id,
         receipt_email: token.email,
-        description: `Purchased the ${product.name}`,
+        description: product.name,
         shipping: {
           name: token.card.name,
           address: product.address

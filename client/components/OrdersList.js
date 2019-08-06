@@ -11,10 +11,6 @@ class OrdersList extends Component {
     this.props.getOrders()
   }
 
-  componentDidUpdate() {
-    console.log('update')
-  }
-
   render() {
     const orders = this.props.orders
     return (

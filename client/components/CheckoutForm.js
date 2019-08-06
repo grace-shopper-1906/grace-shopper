@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, NavLink} from 'react-router-dom'
 import {Container, Form, Input, Button, Message} from 'semantic-ui-react'
-import {getCart} from '../store/cart'
+import {getCart, placeOrderThunk} from '../store/cart'
 import {OrderSummary, InvalidCartMessage} from '../components'
 import {
   fetchShippingAddress,
@@ -28,7 +28,8 @@ export class CheckoutForm extends React.Component {
       country: this.props.shippingAddress.country,
       streetAddress: this.props.shippingAddress.streetAddress,
       canCheckout: true,
-      emptyCart: false
+      emptyCart: false,
+      subtotal: 0
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -51,6 +52,9 @@ export class CheckoutForm extends React.Component {
         emptyCart: true
       })
     }
+    this.setState({
+      subtotal: this.calculateSubtotal()
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -88,8 +92,8 @@ export class CheckoutForm extends React.Component {
 
   async handleToken(token) {
     const product = {
-      amount: 1,
-      name: 'name',
+      amount: this.calculateSubtotal(),
+      name: `Order #${this.props.cart.id}`,
       address: {
         line1: this.state.streetAddress,
         city: this.state.city,
@@ -97,11 +101,20 @@ export class CheckoutForm extends React.Component {
         postal_code: this.state.zipCode
       }
     }
+    console.log('handle token', product)
     const response = await this.props.stripeCheckout(token, product)
     if (response === 'success') {
-      console.log('pushing to history')
-      this.props.history.push(`/checkout/confirmation/${this.props.cart.id}`)
+      this.props.placeOrder(this.props.cart)
     }
+  }
+
+  calculateSubtotal() {
+    const products = this.props.cart.products
+    let sum = 0
+    products.forEach(item => {
+      sum += item.price * item.order_product.quantity
+    })
+    return sum
   }
 
   // eslint-disable-next-line complexity
@@ -215,7 +228,6 @@ export class CheckoutForm extends React.Component {
         <StripeCheckout
           stripeKey={process.env.STRIPE_PUBLIC_KEY}
           token={this.handleToken}
-          price={1}
         />
         <br />
         <br />
@@ -237,7 +249,8 @@ const mapDispatchToProps = dispatch => {
     cShippingA: address => dispatch(updateShippingAddress(address)),
     stripeCheckout: (token, product) =>
       dispatch(stripeCheckout(token, product)),
-    getCart: () => dispatch(getCart())
+    getCart: () => dispatch(getCart()),
+    placeOrder: cart => dispatch(placeOrderThunk(cart))
   }
 }
 

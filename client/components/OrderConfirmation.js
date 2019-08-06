@@ -1,12 +1,16 @@
-import React from 'react'
 import {Container} from 'semantic-ui-react'
+import React, {Component} from 'react'
 
-export const OrderConfirmation = () => {
-  return (
-    <Container>
-      <h1>Order confirmed yo!</h1>
-    </Container>
-  )
+export class OrderConfirmation extends Component {
+  render() {
+    return <div />
+  }
 }
 
 export default OrderConfirmation
+
+const mapDispatch = dispatch => {
+  return {
+    addToCart: cart => dispatch(updateCartThunk(cart))
+  }
+}

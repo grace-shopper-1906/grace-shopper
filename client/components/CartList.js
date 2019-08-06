@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getCart} from '../store/cart'
-import {PlaceOrderButton, CartItem} from '../components'
+import {CartItem} from '../components'
 import {Item, Container, Message, Button} from 'semantic-ui-react'
 
 const _ = require('lodash/lang')
@@ -52,7 +52,6 @@ class CartList extends React.Component {
   }
 
   handleCheckout() {
-    console.log('checkout ')
     this.props.history.push('/checkout')
   }
 

@@ -5,6 +5,7 @@ import axios from 'axios'
  */
 const SET_ORDERS = 'GET_ORDERS'
 const CANCEL_ORDER = 'CANCEL_ORDER'
+const GET_SINGLE_ORDER = 'GET_SINGLE_ORDER'
 
 /**
  * INITIAL STATE
@@ -17,6 +18,8 @@ const defaultOrders = []
 const setOrders = orders => ({type: SET_ORDERS, orders})
 
 const cancelOrder = orderId => ({type: CANCEL_ORDER, orderId})
+
+const getSingleOrder = order => ({type: GET_SINGLE_ORDER, order})
 
 /**
  * THUNK CREATORS
@@ -40,6 +43,15 @@ export const cancelOrderThunk = orderId => async dispatch => {
   }
 }
 
+export const GetSingleOrderThunk = orderId => async dispatch => {
+  try {
+    const {data} = await axios.get(`/api/order/${orderId}`)
+    if (data !== null) dispatch(getSingleOrder(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 /**
  * REDUCER
  */
@@ -49,7 +61,6 @@ export default function(state = defaultOrders, action) {
       return action.orders
     }
     case CANCEL_ORDER: {
-      // ??????
       const newState = [...state]
       return newState.map(order => {
         if (order.id === action.orderId) {
@@ -58,6 +69,9 @@ export default function(state = defaultOrders, action) {
           return newOrder
         } else return order
       })
+    }
+    case GET_SINGLE_ORDER: {
+      return action.order
     }
     default:
       return state
