@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getCart} from '../store/cart'
-import {PlaceOrderButton, CartItem} from '../components'
+import {CartItem} from '../components'
 import {Item, Container, Message, Button} from 'semantic-ui-react'
 
 const _ = require('lodash/lang')
@@ -14,6 +14,7 @@ class CartList extends React.Component {
     }
     this.notEnoughStock = this.notEnoughStock.bind(this)
     this.calculateSubtotal = this.calculateSubtotal.bind(this)
+    this.handleCheckout = this.handleCheckout.bind(this)
   }
 
   componentDidMount() {
@@ -50,6 +51,10 @@ class CartList extends React.Component {
     return sum
   }
 
+  handleCheckout() {
+    this.props.history.push('/checkout')
+  }
+
   render() {
     const products = this.props.cart.products
     return (
@@ -72,15 +77,15 @@ class CartList extends React.Component {
             })}
         </Item.Group>
         <h1>Subtotal: ${products && this.calculateSubtotal() / 100}</h1>
-        <PlaceOrderButton disabled={!this.state.canCheckout} />
-        {/* <Button
+        <Button
           color="green"
           disabled={
             !this.state.canCheckout || (products && products.length === 0)
           }
+          onClick={this.handleCheckout}
         >
           Checkout
-        </Button> */}
+        </Button>
       </Container>
     )
   }

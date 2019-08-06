@@ -11,17 +11,14 @@ class OrdersList extends Component {
     this.props.getOrders()
   }
 
-  componentDidUpdate() {
-    console.log('update')
-  }
-
   render() {
     const orders = this.props.orders
     return (
       <Container>
         <h1>Your Orders:</h1>
         <h2>You have {orders.length} orders</h2>
-        {orders.map(order => <OrderItem key={order.id} order={order} />)}
+        {orders &&
+          orders.map(order => <OrderItem key={order.id} order={order} />)}
       </Container>
     )
   }

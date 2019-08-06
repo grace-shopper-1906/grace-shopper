@@ -20,8 +20,17 @@ export const fetchShippingAddress = () => async dispatch => {
 
 export const updateShippingAddress = address => async dispatch => {
   const {data} = await axios.put('/api/checkout', address)
-  console.log(data)
   dispatch(changeShippingAddress(data))
+}
+
+export const stripeCheckout = (token, product) => async () => {
+  try {
+    const response = await axios.post('/api/checkout/stripe', {token, product})
+    const {status} = response.data
+    return status
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 export function checkoutReducer(address = '', action) {

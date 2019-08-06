@@ -24,7 +24,7 @@ export const OrderItem = props => {
             <h3>Total Price: ${order.totalPrice / 100}</h3>
           </Grid.Column>
           <Grid.Column textAlign="right">
-            {order.status !== 'cancelled' && (
+            {order.status !== ('cancelled' || 'inCart') && (
               <Button
                 color="red"
                 size="tiny"
@@ -38,9 +38,10 @@ export const OrderItem = props => {
       </Segment>
       <Segment>
         <Item.Group>
-          {order.products.map(item => {
-            return <OrderProduct product={item} key={item.id} />
-          })}
+          {order.products &&
+            order.products.map(item => {
+              return <OrderProduct product={item} key={item.id} />
+            })}
         </Item.Group>
       </Segment>
     </Segment.Group>

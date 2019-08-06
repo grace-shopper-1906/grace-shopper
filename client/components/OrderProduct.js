@@ -1,7 +1,7 @@
 import React from 'react'
 import AddToCart from './AddToCart'
 import {NavLink} from 'react-router-dom'
-import {Item, Header, Button} from 'semantic-ui-react'
+import {Item, Header, Button, Container} from 'semantic-ui-react'
 
 export const OrderProduct = props => {
   const product = props.product
@@ -22,10 +22,19 @@ export const OrderProduct = props => {
         <Item.Meta>{`Quantity: ${product.order_product.quantity}`}</Item.Meta>
         <Item.Description>
           <Header sub>
-            Price: {`$${product.order_product.productPrice / 100.0}`}
+            Price:{' '}
+            {props.context === 'orderSummary'
+              ? `$${product.price / 100.0}`
+              : `$${product.order_product.productPrice / 100.0}`}
           </Header>
-          <AddToCart buyItAgain={true} orderProducts={orderProducts} />
-          <Button>Write a Product Review</Button>
+          {props.context === 'orderSummary' ? (
+            ''
+          ) : (
+            <Container>
+              <AddToCart buyItAgain={true} orderProducts={orderProducts} />
+              <Button>Write a Product Review</Button>
+            </Container>
+          )}
         </Item.Description>
       </Item.Content>
     </Item>

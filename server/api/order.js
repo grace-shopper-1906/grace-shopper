@@ -25,6 +25,26 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.get('/:orderId', async (req, res, next) => {
+  try {
+    if (req.user) {
+      const orders = await Order.findOne({
+        where: {
+          id: req.params.orderId,
+          userId: req.user.id,
+          status: {
+            [Op.ne]: 'inCart'
+          }
+        },
+        include: [{model: Product}]
+      })
+      res.send(orders)
+    } else res.status(404).send()
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.put('/cancel/:orderId', async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.orderId)

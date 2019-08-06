@@ -9,12 +9,17 @@ class DisconnectedAddToCart extends React.Component {
 
     return (
       <Button
+        animated
         onClick={() => {
           this.props.addToCart(this.props.orderProducts)
         }}
       >
-        <Icon name="cart arrow down" />
-        {this.props.buyItAgain ? 'Buy it Again' : 'Add to Cart'}
+        <Button.Content hidden>
+          <Icon name="shop" />
+        </Button.Content>
+        <Button.Content visible>
+          {this.props.buyItAgain ? 'Buy it Again' : 'Add to Cart'}
+        </Button.Content>
       </Button>
     )
   }
