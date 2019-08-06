@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import {withRouter, NavLink} from 'react-router-dom'
 import {Container, Form, Input, Button, Message} from 'semantic-ui-react'
 import {getCart} from '../store/cart'
-import {OrderSummary} from '../components'
-import {PlaceOrderButton} from '../components'
+import {OrderSummary, InvalidCartMessage} from '../components'
 import {
   fetchShippingAddress,
   updateShippingAddress,
@@ -28,10 +27,10 @@ export class CheckoutForm extends React.Component {
       state: this.props.shippingAddress.state,
       country: this.props.shippingAddress.country,
       streetAddress: this.props.shippingAddress.streetAddress,
-      canCheckout: true
+      canCheckout: true,
+      emptyCart: false
     }
 
-    this.backHomeButton = this.backHomeButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleToken = this.handleToken.bind(this)
@@ -43,9 +42,13 @@ export class CheckoutForm extends React.Component {
     this.setState(this.props.match.params)
     if (_.isEmpty(this.props.cart)) await this.props.getCart()
     if (!this.notEnoughStock()) {
-      console.log('bad stock')
       this.setState({
         canCheckout: false
+      })
+    }
+    if (this.props.cart.products.length === 0) {
+      this.setState({
+        emptyCart: true
       })
     }
   }
@@ -56,11 +59,6 @@ export class CheckoutForm extends React.Component {
         this.setState(nextProps.shippingAddress)
       }
     }
-  }
-
-  backHomeButton(event) {
-    event.preventDefault()
-    this.props.history.push('/')
   }
 
   handleChange(event) {
@@ -100,7 +98,6 @@ export class CheckoutForm extends React.Component {
       }
     }
     const response = await this.props.stripeCheckout(token, product)
-    console.log('response', response)
     if (response === 'success') {
       console.log('pushing to history')
       this.props.history.push(`/checkout/confirmation/${this.props.cart.id}`)
@@ -112,19 +109,9 @@ export class CheckoutForm extends React.Component {
     if (!this.props.shippingAddress) {
       return <div>Loading</div>
     } else if (!this.state.canCheckout) {
-      return (
-        <Container>
-          <Message negative>
-            <Message.Header>
-              One of your products doesn't have enough stock!
-            </Message.Header>
-            <p>
-              Please fix your <NavLink to="/cart/view">cart</NavLink> to
-              checkout
-            </p>
-          </Message>
-        </Container>
-      )
+      return <InvalidCartMessage />
+    } else if (this.state.emptyCart) {
+      return <InvalidCartMessage empty={true} />
     }
     const hasUser = (
       <Container>
@@ -218,21 +205,22 @@ export class CheckoutForm extends React.Component {
             />
           </Form.Group>
 
-          <Form.Field
+          {/* <Form.Field
             id="form-button-control-public"
             control={Button}
             content="Confirm"
             label=""
-          />
+          /> */}
         </Form>
         <StripeCheckout
           stripeKey={process.env.STRIPE_PUBLIC_KEY}
           token={this.handleToken}
           price={1}
         />
+        <br />
+        <br />
       </Container>
     )
-    //return hasUser
     return hasUser
   }
 }
