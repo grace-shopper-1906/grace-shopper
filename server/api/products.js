@@ -80,6 +80,30 @@ router.get('/all', async (req, res, next) => {
   }
 })
 
+router.get('/topRated', async (req, res, next) => {
+  try {
+    const products = await Product.findAll({
+      include: [{model: Reviews}, {model: Category}]
+    })
+    console.log('top rate', products[0].dataValues)
+    let recommendedProducts = []
+    products.map(product => {
+      let total = 0
+      product.dataValues.reviews.map(review => {
+        total += review.dataValues.star
+      })
+      const avg = Math.floor(total / product.reviews.length)
+      if (avg >= 4 && recommendedProducts.length < 6) {
+        recommendedProducts.push(product)
+      }
+    })
+    console.log('recommedned', recommendedProducts)
+    res.json(products)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/:id', async (req, res, next) => {
   try {
     const id = req.params.id

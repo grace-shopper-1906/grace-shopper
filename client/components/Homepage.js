@@ -14,7 +14,7 @@ import {NavLink as Link} from 'react-router-dom'
 
 class DisconnectedHomepage extends React.Component {
   componentDidMount() {
-    this.props.getProducts()
+    // this.props.getProducts()
   }
   render() {
     const {products, recommendedProducts, categories} = this.props
@@ -55,7 +55,7 @@ class DisconnectedHomepage extends React.Component {
             ))}
           </Card.Group>
           <Segment inverted>
-            <Header as="h4">Top Rated Products</Header>
+            <Header as="h4">Recommended Products</Header>
           </Segment>
           <Card.Group centered stackable>
             {recommendedProducts.map(product => (
@@ -78,7 +78,7 @@ const mapState = state => {
         total += review.star
       })
       const avg = Math.floor(total / product.reviews.length)
-      if (avg >= 4 && recommendedProducts.length < 6) {
+      if (avg >= 3 && recommendedProducts.length < 3) {
         recommendedProducts.push(product)
       }
     })
@@ -93,7 +93,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getProducts: () => dispatch(getAllProductsThunk()),
+    // getProducts: () => dispatch(getAllProductsThunk()),
     applyFilter: (page, category, sortBy, searchBy) =>
       dispatch(fetchProductsThunk(page, category, sortBy, searchBy))
   }
