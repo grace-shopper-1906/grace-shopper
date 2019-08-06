@@ -2,6 +2,7 @@ import React from 'react'
 import AddToCart from './AddToCart'
 import {NavLink} from 'react-router-dom'
 import {Item, Header, Button, Container} from 'semantic-ui-react'
+import history from '../history'
 
 export const OrderProduct = props => {
   const product = props.product
@@ -10,6 +11,10 @@ export const OrderProduct = props => {
     quantity: product.order_product.quantity,
     productId: product.id,
     event: 'addProduct'
+  }
+
+  const handleClick = productId => {
+    history.push(`/review/${productId}`)
   }
 
   return (
@@ -32,7 +37,9 @@ export const OrderProduct = props => {
           ) : (
             <Container>
               <AddToCart buyItAgain={true} orderProducts={orderProducts} />
-              <Button>Write a Product Review</Button>
+              <Button onClick={() => handleClick(product.id)}>
+                Write a Product Review
+              </Button>
             </Container>
           )}
         </Item.Description>
