@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
+import {reviewThunk} from '../store/review.js'
 import {
   Container,
   Form,
@@ -14,11 +15,19 @@ export class ReviewForm extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      stars: 1,
+      review: this.props.review
+    }
 
     this.backHomeButton = this.backHomeButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleRate = this.handleRate.bind(this)
+  }
+
+  handleRate(event) {
+    console.log(event.target)
   }
 
   componentDidMount() {
@@ -38,6 +47,7 @@ export class ReviewForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault()
+    this.props.rev(this.state)
   }
 
   render() {
@@ -45,8 +55,13 @@ export class ReviewForm extends React.Component {
       <Container>
         <h1>Review:</h1>
         <Form onSubmit={this.handleSubmit}>
-          <Rating icon="star" defaultRating={1} maxRating={5}>
-            Star given: {2}
+          <Rating
+            icon="star"
+            defaultRating={1}
+            maxRating={5}
+            onRate={this.handleRate}
+          >
+            Star given: {1}
           </Rating>
           <TextArea
             className="reviewSize"
@@ -55,7 +70,6 @@ export class ReviewForm extends React.Component {
             type="text"
             onChange={this.handleChange}
             value={this.state.firstName}
-            //label="Review"
             placeholder="Write Review Here"
           />
 
@@ -73,12 +87,13 @@ export class ReviewForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  review: state.review
 })
 
 const mapDispatchToProps = dispatch => {
   return {
-    //
+    rev: thereview => dispatch(reviewThunk(thereview))
   }
 }
 
