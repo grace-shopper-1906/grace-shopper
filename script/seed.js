@@ -14,7 +14,7 @@ const {
 const faker = require('faker')
 
 const createProduct = async () => {
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 1000; i++) {
     const product = {
       title: faker.commerce.productName(),
       picture: faker.image.image(),
@@ -77,7 +77,6 @@ const createShippingAddress = async () => {
       zipCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
       country: faker.address.country()
-      //userId: Math.floor(Math.random() * 30 + 1)
     }
     await ShippingAddress.create(shippingAddress)
   }
