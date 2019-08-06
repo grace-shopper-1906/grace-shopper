@@ -7,8 +7,8 @@ export const updateReviews = review => ({
   review
 })
 
-export const updateReviewThunk = review => async dispatch => {
-  const {data} = await axios.put('/api/review', review)
+export const updateReviewThunk = (id, review) => async dispatch => {
+  const {data} = await axios.post(`/api/review/${id}`, review)
   dispatch(updateReviews(data))
 }
 

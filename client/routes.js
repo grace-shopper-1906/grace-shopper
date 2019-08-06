@@ -34,7 +34,7 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route exact path="/checkout" component={CheckoutForm} />
             <Route path="/orders" component={OrdersList} />
-            <Route path="/review" component={ReviewForm} />
+            <Route path="/review/:id" component={ReviewForm} />
             {/* <Route path="/checkout/confirmation/:cartId" component={OrderConfirmation}/>  */}
           </Switch>
         )}

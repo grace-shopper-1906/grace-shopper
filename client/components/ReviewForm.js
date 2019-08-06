@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
-import {reviewThunk} from '../store/review.js'
+import {updateReviewThunk} from '../store/review'
 import {
   Container,
   Form,
@@ -11,16 +11,17 @@ import {
   Button
 } from 'semantic-ui-react'
 
+//const id = 3 ///really bad change this testing only
+
 export class ReviewForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      stars: 1,
-      review: this.props.review
+      star: 1,
+      review: ''
     }
 
-    this.backHomeButton = this.backHomeButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleRate = this.handleRate.bind(this)
@@ -28,16 +29,13 @@ export class ReviewForm extends React.Component {
 
   handleRate(event) {
     console.log(event.target)
+    //this.setState({star: 3}) //fix this later
+    //this.setState({star: 1, review: ''})
   }
 
-  componentDidMount() {
-    //this.setState(this.props.match.params)
-  }
-
-  backHomeButton(event) {
-    event.preventDefault()
-    this.props.history.push('/')
-  }
+  //componentDidMount() {
+  //this.setState(this.props.match.params)
+  //}
 
   handleChange(event) {
     this.setState({
@@ -47,7 +45,9 @@ export class ReviewForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    this.props.rev(this.state)
+    let productId = 3 //testing only obs
+    this.props.review(productId, this.state)
+    //this.props.history.push('/review')
   }
 
   render() {
@@ -69,7 +69,7 @@ export class ReviewForm extends React.Component {
             name="review"
             type="text"
             onChange={this.handleChange}
-            value={this.state.firstName}
+            value={this.state.review}
             placeholder="Write Review Here"
           />
 
@@ -93,7 +93,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    rev: thereview => dispatch(reviewThunk(thereview))
+    review: (id, thereview) => dispatch(updateReviewThunk(id, thereview))
   }
 }
 
