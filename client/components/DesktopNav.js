@@ -58,9 +58,6 @@ export default class DesktopNav extends Component {
                     <Menu.Item as={NavLink} exact to="/orders">
                       Orders
                     </Menu.Item>
-                    <Menu.Item as={NavLink} exact to="/account">
-                      Account
-                    </Menu.Item>
                     <Menu.Item position="right">
                       <Button as={NavLink} exact to="#" onClick={handleClick}>
                         Log Out

@@ -65,14 +65,6 @@ export default class MobileNav extends Component {
             >
               Orders
             </Menu.Item>
-            <Menu.Item
-              as={NavLink}
-              exact
-              to="/account"
-              onClick={this.handleSidebarHide}
-            >
-              Account
-            </Menu.Item>
             <Button as={NavLink} exact to="#" onClick={handleClick}>
               Log Out
             </Button>

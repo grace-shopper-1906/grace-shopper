@@ -19,7 +19,6 @@ const images = [
   '/blue-t-shirt.jpg',
   '/bright-red-purse-with-gold.jpg',
   '/business-cat-in-office.jpg',
-  '/car.jpg',
   '/galaxy-earrings.jpg',
   '/grey-and-peach-scarf-product.jpg',
   '/pool-floaty-fun.jpg',
@@ -32,7 +31,7 @@ const createProduct = async () => {
   for (let i = 0; i < 1000; i++) {
     const product = {
       title: faker.commerce.productName(),
-      picture: images[Math.floor(Math.random() * 11)],
+      picture: images[Math.floor(Math.random() * 10)],
       description: faker.lorem.paragraph(),
       price: Math.floor(Math.random() * 100000 + 1),
       inventoryQuantity: Math.floor(Math.random() * 100 + 1)
@@ -103,7 +102,7 @@ const createReview = async () => {
     const review = {
       userId: Math.floor(Math.random() * 30 + 1),
       productId: Math.floor(Math.random() * 100 + 1),
-      star: Math.floor(Math.random() * 5) + 1,
+      star: Math.floor(Math.random() * 4) + 2,
       text: faker.lorem.paragraphs()
     }
     await Review.create(review)
