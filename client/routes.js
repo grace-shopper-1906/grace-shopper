@@ -28,6 +28,8 @@ class Routes extends Component {
         <Route exact path="/cart/view" component={CartList} />
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/home" component={Homepage} />
+        <Route exact path="/" component={Homepage} />
+
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -36,8 +38,8 @@ class Routes extends Component {
             {/* <Route path="/checkout/confirmation/:cartId" component={OrderConfirmation}/>  */}
           </Switch>
         )}
-        {/* Displays our homepage component as a fallback */}
-        <Route component={Homepage} />
+        {/* Displays our login component as a fallback */}
+        <Route component={Login} />
       </Switch>
     )
   }

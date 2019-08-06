@@ -33,7 +33,6 @@ class DisconnectedAllProductsHeader extends React.Component {
   async componentDidMount() {
     const unparsed = this.props.location.search
     const query = queryString.parse(unparsed)
-    if (!query.page) query.page = 1
     query.page = parseInt(query.page, 10)
     await this.setState(query)
     this.props.getProducts(
@@ -76,8 +75,8 @@ class DisconnectedAllProductsHeader extends React.Component {
     this.callThunk()
   }
 
-  async handlePaginationChange(e, {page}) {
-    await this.setState({page})
+  async handlePaginationChange(e, {activePage}) {
+    await this.setState({page: activePage})
     this.callThunk()
   }
 
